@@ -1,0 +1,84 @@
+[
+  {
+    "_id": "69abe4622f5448f32d8f4d8b",
+    "title": "Test",
+    "price": 20201,
+    "offer": "2311",
+    "desc": "Resort",
+    "image": "/uploads/OmenSplatter (1).jpg",
+    "images": [
+      "/uploads/OmenSplatter (1).jpg"
+    ],
+    "amen": [
+      "AC",
+      "Geyser",
+      "WiFi",
+      "TV",
+      "Breakfast",
+      "Wifi"
+    ],
+    "reviews": [],
+    "__v": 0
+  },
+  {
+    "_id": "69abe67fc59ff19f138ca7d0",
+    "title": "Test 2",
+    "price": 1010,
+    "offer": "10",
+    "desc": "Test for checking multiple images for a product",
+    "image": "/uploads/Space.jpg",
+    "images": [
+      "/uploads/Space.jpg"
+    ],
+    "amen": [
+      "AC",
+      "Geyser",
+      "WiFi",
+      "TV",
+      "Breakfast"
+    ],
+    "reviews": [],
+    "__v": 0
+  },
+  {
+    "_id": "69abe967c59ff19f138ca7df",
+    "title": "Test3",
+    "price": 1000,
+    "offer": "100",
+    "desc": "Test 3 for image uploading",
+    "image": "/uploads/wallpaper.jpg",
+    "images": [
+      "/uploads/space-1.jpg"
+    ],
+    "amen": [
+      "AC",
+      "Geyser",
+      "WiFi",
+      "TV",
+      "Breakfast"
+    ],
+    "reviews": [],
+    "__v": 0
+  },
+  {
+    "_id": "69abea80c59ff19f138ca7e4",
+    "title": "test",
+    "price": 10,
+    "offer": null,
+    "desc": null,
+    "image": "/uploads/p.json",
+    "images": [
+      "/uploads/i0.json",
+      "/uploads/i1.json"
+    ],
+    "amen": [
+      "AC",
+      "Geyser",
+      "WiFi",
+      "TV",
+      "Breakfast"
+    ],
+    "reviews": [],
+    "__v": 0
+  }
+]
