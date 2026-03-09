@@ -20,9 +20,12 @@ import { bookingAction } from "../../../serverActions/bookingAction";
 import { addReviewAction } from "../../../serverActions/reviewAction";
 import CalendarComponent from "../../../components/Calender";
 import { sendBookingEmail } from "../../../utils/sendEmail/sendEmail";
+import { getSession } from "next-auth/react";
+import LoginModal from "../../../components/LoginModal";
 
 const DynamicProduct = () => {
   const [resortRoom, setResortRoom] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -105,6 +108,12 @@ const DynamicProduct = () => {
     new Date(selectedDates.endDate).toDateString();
 
   const bookingHandler = async () => {
+    const session = await getSession();
+    if (!session) {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (!selectedDates?.startDate || !selectedDates?.endDate) {
       alert("Please select start and end dates before booking.");
       return;
@@ -182,6 +191,13 @@ Total Price: ₹${totalAmount}
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
+
+    const session = await getSession();
+    if (!session) {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (ratingInput < 1 || ratingInput > 5) {
       alert("Please select a rating between 1 and 5 stars.");
       return;
@@ -249,6 +265,7 @@ Total Price: ₹${totalAmount}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="mb-8">
           <button

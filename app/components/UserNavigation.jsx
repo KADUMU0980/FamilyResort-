@@ -2,12 +2,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  Phone, 
-  Calendar, 
-  LogOut, 
-  Menu, 
-  X, 
+import {
+  Phone,
+  Calendar,
+  LogOut,
+  LogIn,
+  Menu,
+  X,
   Home,
   Sparkles,
   Mail,
@@ -39,35 +40,32 @@ const UserNavigation = ({ userName }) => {
 
         {/* Center Navigation Links - Text Only */}
         <div className="flex items-center gap-2">
-          <Link 
-            href="/user" 
-            className={`px-5 py-2.5 rounded-lg transition-all font-medium ${
-              isActive('/user') 
-                ? 'bg-blue-600 text-white shadow-md' 
+          <Link
+            href="/user"
+            className={`px-5 py-2.5 rounded-lg transition-all font-medium ${isActive('/user')
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50'
-            }`}
+              }`}
           >
             Home
           </Link>
 
-          <Link 
-            href="/user/bookings" 
-            className={`px-5 py-2.5 rounded-lg transition-all font-medium ${
-              isActive('/user/bookings') 
-                ? 'bg-blue-600 text-white shadow-md' 
+          <Link
+            href="/user/bookings"
+            className={`px-5 py-2.5 rounded-lg transition-all font-medium ${isActive('/user/bookings')
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50 text-md'
-            }`}
+              }`}
           >
             Reservations
           </Link>
 
-          <Link 
-            href="/user/profile" 
-            className={` rounded-lg transition-all font-medium ${
-              isActive('/user/profile') 
-                ? 'bg-blue-600 text-white shadow-md' 
+          <Link
+            href="/user/profile"
+            className={` rounded-lg transition-all font-medium ${isActive('/user/profile')
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50 text-md px-5 py-2.5'
-            }`}
+              }`}
           >
             Profile
           </Link>
@@ -78,17 +76,26 @@ const UserNavigation = ({ userName }) => {
             </button>
           </a>
 
-          
+
         </div>
 
-       
-        <Link 
-          href="/api/auth/signout" 
-          className="flex items-center gap-2 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md text-sm font-medium"
-        >
-          <LogOut  className="w-4 h-4"/>
-          <span>Logout</span>
-        </Link>
+        {userName ? (
+          <Link
+            href="/api/auth/signout"
+            className="flex items-center gap-2 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md text-sm font-medium"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Logout</span>
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="flex items-center gap-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md text-sm font-medium"
+          >
+            <LogIn className="w-4 h-4" />
+            <span>Login</span>
+          </Link>
+        )}
       </nav>
 
       <nav className="hidden md:flex lg:hidden items-center justify-between bg-white shadow-lg px-6 py-4 rounded-2xl sticky top-4 z-50 mx-4 my-4 border border-gray-200">
@@ -103,37 +110,34 @@ const UserNavigation = ({ userName }) => {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Link 
-            href="/user" 
-            className={`p-3 rounded-lg transition-all ${
-              isActive('/user') 
-                ? 'bg-blue-600 text-white shadow-md' 
+          <Link
+            href="/user"
+            className={`p-3 rounded-lg transition-all ${isActive('/user')
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50'
-            }`}
+              }`}
             title="Home"
           >
             <Home className="w-5 h-5" />
           </Link>
 
-          <Link 
-            href="/user/bookings" 
-            className={`p-3 rounded-lg transition-all ${
-              isActive('/user/bookings') 
-                ? 'bg-blue-600 text-white shadow-md' 
+          <Link
+            href="/user/bookings"
+            className={`p-3 rounded-lg transition-all ${isActive('/user/bookings')
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50'
-            }`}
+              }`}
             title="Reservations"
           >
             <Calendar className="w-5 h-5" />
           </Link>
 
-          <Link 
-            href="/user/profile" 
-            className={`p-3 rounded-lg transition-all ${
-              isActive('/user/profile') 
-                ? 'bg-blue-600 text-white shadow-md' 
+          <Link
+            href="/user/profile"
+            className={`p-3 rounded-lg transition-all ${isActive('/user/profile')
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50'
-            }`}
+              }`}
             title="Profile"
           >
             <User className="w-5 h-5" />
@@ -143,13 +147,23 @@ const UserNavigation = ({ userName }) => {
             <Phone className="w-5 h-5 text-blue-600" />
           </div>
 
-          <Link 
-            href="/api/auth/signout" 
-            className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md"
-            title="Logout"
-          >
-            <LogOut className="w-5 h-5" />
-          </Link>
+          {userName ? (
+            <Link
+              href="/api/auth/signout"
+              className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md"
+              title="Login"
+            >
+              <LogIn className="w-5 h-5" />
+            </Link>
+          )}
         </div>
       </nav>
 
@@ -168,37 +182,34 @@ const UserNavigation = ({ userName }) => {
 
           {/* Icon Navigation - Always Visible */}
           <div className="flex items-center gap-1">
-            <Link 
-              href="/user" 
-              className={`p-2.5 rounded-lg transition-all ${
-                isActive('/user') 
-                  ? 'bg-blue-600 text-white shadow-md' 
+            <Link
+              href="/user"
+              className={`p-2.5 rounded-lg transition-all ${isActive('/user')
+                  ? 'bg-blue-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-blue-50'
-              }`}
+                }`}
               title="Home"
             >
               <Home className="w-5 h-5" />
             </Link>
 
-            <Link 
-              href="/user/bookings" 
-              className={`p-2.5 rounded-lg transition-all ${
-                isActive('/user/bookings') 
-                  ? 'bg-blue-600 text-white shadow-md' 
+            <Link
+              href="/user/bookings"
+              className={`p-2.5 rounded-lg transition-all ${isActive('/user/bookings')
+                  ? 'bg-blue-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-blue-50'
-              }`}
+                }`}
               title="Reservations"
             >
               <Calendar className="w-5 h-5" />
             </Link>
 
-            <Link 
-              href="/user/profile" 
-              className={`p-2.5 rounded-lg transition-all ${
-                isActive('/user/profile') 
-                  ? 'bg-blue-600 text-white shadow-md' 
+            <Link
+              href="/user/profile"
+              className={`p-2.5 rounded-lg transition-all ${isActive('/user/profile')
+                  ? 'bg-blue-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-blue-50'
-              }`}
+                }`}
               title="Profile"
             >
               <User className="w-5 h-5" />
@@ -236,15 +247,26 @@ const UserNavigation = ({ userName }) => {
               </div>
             </div>
 
-            {/* Logout Link */}
-            <Link
-              href="/api/auth/signout"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md font-medium"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="text-sm font-semibold text-white">Logout</span>
-            </Link>
+            {/* Auth Link */}
+            {userName ? (
+              <Link
+                href="/api/auth/signout"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md font-medium"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="text-sm font-semibold text-white">Logout</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md font-medium"
+              >
+                <LogIn className="w-5 h-5" />
+                <span className="text-sm font-semibold text-white">Login</span>
+              </Link>
+            )}
           </div>
         )}
       </nav>
