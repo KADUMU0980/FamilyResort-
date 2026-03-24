@@ -42,7 +42,7 @@ People: ${booking.numberOfPeople}
 Occasion: ${booking.occasion}
 Start Date: ${booking.startDate}
 End Date: ${booking.endDate}
-Price: â‚¹${booking.price}
+Price: ₹${booking.price}
 `
   };
 

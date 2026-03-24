@@ -11,7 +11,8 @@ import {
   Loader2,
   CheckCircle,
   AlertCircle,
-  Camera
+  Camera,
+  ArrowBigLeft
 } from "lucide-react";
 
 const UserProfile = ({ userEmail, userName, userPhone }) => {
@@ -109,6 +110,13 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 px-4">
+            <button
+              onClick={() => window.history.back()}
+              className="text-indigo-600 hover:text-indigo-800 font-medium mb-4 flex items-center gap-2"
+            >
+              <ArrowBigLeft className="w-5 h-5" />
+              Back to Home
+            </button>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
           <div className="flex items-center gap-4 mb-4">

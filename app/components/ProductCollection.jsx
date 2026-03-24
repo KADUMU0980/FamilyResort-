@@ -1,10 +1,11 @@
 ﻿"use client";
 import React, { useState, useEffect } from "react";
 import {
-  Home, DollarSign, Loader2, AlertCircle, MapPin, Star,
-  Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp
+  Home, Loader2, AlertCircle, MapPin,
+  Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp,Phone
 } from "lucide-react";
 import Image from "next/image";
+
 
 const ProductCollection = () => {
   const [collection, setCollection] = useState([]);
@@ -362,17 +363,6 @@ const ProductCollection = () => {
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-110"
                         />
-
-                        {item.offer && (
-                          <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                            {item.offer}
-                          </div>
-                        )}
-
-                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
-                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                          <span className="text-sm font-semibold">4.8</span>
-                        </div>
                       </div>
 
                       <div className="p-5">
@@ -409,7 +399,6 @@ const ProductCollection = () => {
 
                         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                           <div className="flex items-center gap-2">
-                            <DollarSign className="w-5 h-5 text-green-600" />
                             <div>
                               <p className="text-2xl font-bold text-gray-900">₹{item.price.toLocaleString()}</p>
                               <p className="text-xs text-gray-500">per night</p>
@@ -420,8 +409,15 @@ const ProductCollection = () => {
                             href={`/detail/${item._id}`}
                             className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors group-hover:shadow-lg inline-block"
                           >
-                            Book Now
+                            Book
                           </a>
+                          <a href="tel:+919849660462" className="">
+                            <button className="bg-green-400 text-white px-3 py-2 rounded-lg font-small flex items-center gap-2">
+                              <Phone className="w-5 h-5 text-blue-600" />
+                              <span className="lg:hidden">Call Resort</span>
+                            </button>
+                          </a>
+
                         </div>
                       </div>
                     </div>

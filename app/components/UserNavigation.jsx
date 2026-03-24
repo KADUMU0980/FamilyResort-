@@ -41,8 +41,8 @@ const UserNavigation = ({ userName }) => {
         {/* Center Navigation Links - Text Only */}
         <div className="flex items-center gap-2">
           <Link
-            href="/user"
-            className={`px-5 py-2.5 rounded-lg transition-all font-medium ${isActive('/user')
+            href="/"
+            className={`px-5 py-2.5 rounded-lg transition-all text-[24px] font-medium ${isActive('/user')
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50'
               }`}
@@ -52,7 +52,7 @@ const UserNavigation = ({ userName }) => {
 
           <Link
             href="/user/bookings"
-            className={`px-5 py-2.5 rounded-lg transition-all font-medium ${isActive('/user/bookings')
+            className={`px-5 py-2.5 rounded-lg transition-all text-[24px] font-medium ${isActive('/user/bookings')
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50 text-md'
               }`}
@@ -62,7 +62,7 @@ const UserNavigation = ({ userName }) => {
 
           <Link
             href="/user/profile"
-            className={` rounded-lg transition-all font-medium ${isActive('/user/profile')
+            className={` rounded-lg transition-all font-medium text-[24px] ${isActive('/user/profile')
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50 text-md px-5 py-2.5'
               }`}
@@ -71,11 +71,17 @@ const UserNavigation = ({ userName }) => {
           </Link>
 
           <a href="tel:+919849660462">
-            <button className="bg-green-400 text-white px-3 py-2 rounded-lg font-small">
+            <button className="relative flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all shadow-sm hover:shadow-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
+              </svg>
               Call Resort
             </button>
           </a>
-
 
         </div>
 
@@ -214,6 +220,11 @@ const UserNavigation = ({ userName }) => {
             >
               <User className="w-5 h-5" />
             </Link>
+            <Link
+              href="tel:+919849660462"
+            >
+              <Phone className="w-5 h-5" />
+            </Link>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -235,7 +246,9 @@ const UserNavigation = ({ userName }) => {
             {/* Contact Info */}
             <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-gray-200">
               <Phone className="w-5 h-5 text-blue-600" />
-              <p className="text-sm font-semibold text-gray-800">99999999</p>
+              <a href="tel:+919849660462" className="text-sm font-semibold text-gray-800">
+                Call Resort
+              </a>
             </div>
 
             {/* Email Contact */}

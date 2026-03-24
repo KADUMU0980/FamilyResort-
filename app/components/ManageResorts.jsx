@@ -328,7 +328,7 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
         <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">{resort.title}</h3>
         
         <div className="space-y-2 mb-4">
-          <p className="text-2xl font-bold text-blue-600">â‚¹{resort.price}</p>
+          <p className="text-2xl font-bold text-blue-600">₹{resort.price}</p>
           {resort.offer && (
             <p className="text-sm text-green-600 font-medium">{resort.offer}</p>
           )}

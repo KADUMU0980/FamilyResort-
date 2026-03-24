@@ -443,7 +443,7 @@ Total Price: ₹${totalAmount}
               <button
                 className={`w-full py-4 rounded-2xl font-bold transition-all ${totalAmount > 0 && occasion
                   ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-xl"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-red-400 text-gray-800 cursor-not-allowed"
                   }`}
                 onClick={bookingHandler}
                 disabled={totalAmount === 0 || !occasion}
@@ -462,13 +462,13 @@ Total Price: ₹${totalAmount}
               )}
 
               {/* Offer Display */}
-              {resortRoom.offer && (
+              {/* {resortRoom.offer && (
                 <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg text-center">
                   <p className="text-sm text-orange-800 font-semibold">
                     🎉 Special Offer: {resortRoom.offer}
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Additional Info */}
