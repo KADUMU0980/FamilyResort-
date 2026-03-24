@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { 
-  Home, Tag, DollarSign, Loader2, AlertCircle, MapPin, Star,
+  Home, DollarSign, Loader2, AlertCircle, MapPin, Star,
   Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { debounce } from "lodash";
 
 const ProductCollectionBackend = () => {
@@ -57,7 +58,8 @@ const ProductCollectionBackend = () => {
     }
   };
 
-  // Debounced search
+  // debouncing with useCallback requires ignoring the exhaustive-deps rule
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedFetch = useCallback(
     debounce((filters) => fetchProducts(filters), 500),
     []
@@ -77,7 +79,7 @@ const ProductCollectionBackend = () => {
       amenities: selectedAmenities,
       sortBy
     });
-  }, [searchQuery, priceRange, selectedAmenities, sortBy]);
+  }, [searchQuery, priceRange, selectedAmenities, sortBy, debouncedFetch]);
 
   const toggleAmenity = (amenity) => {
     setSelectedAmenities(prev =>
@@ -240,7 +242,7 @@ const ProductCollectionBackend = () => {
               {showPriceFilter && (
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm text-gray-600 block mb-1">Min: ₹{priceRange.min}</label>
+                    <label className="text-sm text-gray-600 block mb-1">Min: â‚¹{priceRange.min}</label>
                     <input
                       type="range"
                       min="0"
@@ -252,7 +254,7 @@ const ProductCollectionBackend = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-sm text-gray-600 block mb-1">Max: ₹{priceRange.max}</label>
+                    <label className="text-sm text-gray-600 block mb-1">Max: â‚¹{priceRange.max}</label>
                     <input
                       type="range"
                       min="0"
@@ -338,10 +340,11 @@ const ProductCollectionBackend = () => {
                   <Link key={item._id} href={`/detail/${item._id}`} className="group">
                     <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
                       <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-110"
                         />
                         {item.offer && (
                           <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
@@ -380,7 +383,7 @@ const ProductCollectionBackend = () => {
                           <div className="flex items-center gap-2">
                             <DollarSign className="w-5 h-5 text-green-600" />
                             <div>
-                              <p className="text-2xl font-bold text-gray-900">₹{item.price}</p>
+                              <p className="text-2xl font-bold text-gray-900">â‚¹{item.price}</p>
                               <p className="text-xs text-gray-500">per night</p>
                             </div>
                           </div>

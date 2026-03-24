@@ -1,4 +1,4 @@
-import connectToDatabase from "@/app/utils/configue/db";
+﻿import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
 import { NextResponse } from "next/server";
 

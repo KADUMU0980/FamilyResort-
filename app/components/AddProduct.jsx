@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useRef } from "react";
+import Image from "next/image";
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
@@ -62,7 +63,7 @@ const AddProduct = () => {
     formData.append("desc", desc);
     formData.append("profileImage", profileImageFile);
 
-    // ✅ Use the same key "carouselImages" for all — standard multi-file pattern
+    // âœ… Use the same key "carouselImages" for all â€” standard multi-file pattern
     carouselImages.forEach(({ file }) => {
       formData.append("carouselImages", file);
     });
@@ -152,7 +153,7 @@ const AddProduct = () => {
             className="w-full border px-3 py-2 rounded bg-gray-50" accept="image/*" required />
           <p className="text-xs text-gray-500 mt-1">Shown on the main listings page.</p>
           {profilePreview && (
-            <img src={profilePreview} alt="Profile preview"
+            <Image src={profilePreview} alt="Profile preview" width={96} height={96}
               className="mt-2 h-24 w-24 object-cover rounded border" />
           )}
         </div>
@@ -165,7 +166,7 @@ const AddProduct = () => {
           <input type="file" onChange={handleCarouselChange}
             className="w-full border px-3 py-2 rounded bg-gray-50" accept="image/*" multiple />
           <p className="text-xs text-gray-500 mt-1 mb-2">
-            Select multiple files at once, or pick files one by one — they'll all be added below.
+            Select multiple files at once, or pick files one by one â€” they&apos;ll all be added below.
           </p>
 
           {carouselImages.length > 0 && (
@@ -176,13 +177,13 @@ const AddProduct = () => {
               <div className="flex flex-wrap gap-3">
                 {carouselImages.map(({ file, preview }, index) => (
                   <div key={index} className="relative group">
-                    <img src={preview} alt={file.name}
+                    <Image src={preview} alt={file.name} width={80} height={80}
                       className="h-20 w-20 object-cover rounded border" />
                     <button type="button" onClick={() => removeCarouselImage(index)}
                       className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full
                                  w-5 h-5 text-xs flex items-center justify-center
                                  opacity-0 group-hover:opacity-100 transition-opacity">
-                      ✕
+                      âœ•
                     </button>
                     <p className="text-xs text-gray-500 truncate w-20 mt-1">{file.name}</p>
                   </div>

@@ -1,4 +1,4 @@
-import Registration from "@/app/components/Registration"
+﻿import Registration from "@/app/components/Registration"
 const UserRegister = () =>{
     return (
         <div>

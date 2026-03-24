@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { DateRangePicker } from "react-date-range";
 import { format } from "date-fns";
@@ -35,7 +35,7 @@ const CalendarComponent = ({ onDateChange }) => {
             {formatDate(range[0].startDate)}
           </p>
         </div>
-        <div className="text-gray-400 font-bold text-lg">→</div>
+        <div className="text-gray-400 font-bold text-lg">â†’</div>
         <div className="flex-1 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5 text-center">
           <p className="text-xs text-indigo-400 font-medium uppercase tracking-wide mb-0.5">Check-out</p>
           <p className="text-sm font-bold text-indigo-700">

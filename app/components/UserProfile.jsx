@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import {
@@ -269,7 +269,7 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
               </div>
 
               <p className="text-xs text-gray-600">
-                Leave password fields empty if you don't want to change your password
+                Leave password fields empty if you don&apos;t want to change your password
               </p>
             </div>
           )}

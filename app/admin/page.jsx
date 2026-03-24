@@ -1,7 +1,7 @@
-import React from 'react'
+﻿import React from 'react'
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import {authOptions} from '@/app/api/auth/[...nextauth]/route';
+import {authOptions} from '@/app/api/auth/[...nextauth]/options';
 import AddProduct from '../components/AddProduct';
 import AdminNav from '../components/AdminNav';
 const AdminPage = async() => {

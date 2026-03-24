@@ -1,5 +1,4 @@
-import { title } from "process";
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
   title: { type: String, required: true },

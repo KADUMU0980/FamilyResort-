@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { ChevronDown, ChevronRight, Calendar, DollarSign, Tag, Home, Check, X, Clock, Trash2 } from "lucide-react";
@@ -170,7 +170,7 @@ const UserRow = ({ user, onApprovalChange }) => {
                         </div>
                         <div>
                           <p className="text-xs text-gray-500">Price</p>
-                          <p className="font-semibold text-gray-900">₹{booking.price || 0}</p>
+                          <p className="font-semibold text-gray-900">â‚¹{booking.price || 0}</p>
                         </div>
                       </div>
 
@@ -246,7 +246,7 @@ const UserRow = ({ user, onApprovalChange }) => {
 };
 
 const UsersClient = ({ users: initialUsers }) => {
-  const [users, setUsers] = useState(initialUsers);
+  const [users] = useState(initialUsers);
 
   const refreshUsers = async () => {
     try {
@@ -422,7 +422,7 @@ export default UsersClient;
 //                         </div>
 //                         <div>
 //                           <p className="text-xs text-gray-500">Price</p>
-//                           <p className="font-semibold text-gray-900">₹{booking.price || 0}</p>
+//                           <p className="font-semibold text-gray-900">â‚¹{booking.price || 0}</p>
 //                         </div>
 //                       </div>
 
@@ -594,7 +594,7 @@ export default UsersClient;
 // //                         </div>
 // //                         <div>
 // //                           <p className="text-xs text-gray-500">Price</p>
-// //                           <p className="font-semibold text-gray-900">₹{booking.price || 0}</p>
+// //                           <p className="font-semibold text-gray-900">â‚¹{booking.price || 0}</p>
 // //                         </div>
 // //                       </div>
 

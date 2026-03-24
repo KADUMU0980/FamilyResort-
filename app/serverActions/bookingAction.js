@@ -1,7 +1,7 @@
-"use server";
+﻿"use server";
 import connectToDatabase from "@/app/utils/configue/db";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import userModel from "../utils/models/userModel";
 import bookingModel from "../utils/models/bookingModel";
 
@@ -31,7 +31,7 @@ export async function bookingAction(bookingDetails) {
       productName: bookingDetails.productName,
       offer: bookingDetails.offer,
       image: bookingDetails.image,
-      resortRoom: bookingDetails.resortRoom,   // ✅ FIXED
+      resortRoom: bookingDetails.resortRoom,   // âœ… FIXED
       user: userId,
       status: "pending",
       numberOfPeople: bookingDetails.numberOfPeople,

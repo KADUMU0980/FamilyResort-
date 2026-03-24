@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+﻿import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import connectToDatabase from "@/app/utils/configue/db";
 import userModel from "@/app/utils/models/userModel";
 import bookingModel from "@/app/utils/models/bookingModel";
@@ -77,13 +77,13 @@ export async function GET() {
 // POST - Update booking status (Approve/Reject)
 export async function POST(req) {
   try {
-    console.log("🔵 POST /api/users called");
+    console.log("ðŸ”µ POST /api/users called");
     
     const session = await getServerSession(authOptions);
     console.log("Session:", session);
 
     if (!session?.user?.email) {
-      console.log("❌ No session found");
+      console.log("âŒ No session found");
       return new Response(
         JSON.stringify({ message: "Unauthorized - Please log in" }),
         { 
@@ -94,7 +94,7 @@ export async function POST(req) {
     }
 
     if (session.user.role !== "admin") {
-      console.log("❌ User is not admin");
+      console.log("âŒ User is not admin");
       return new Response(
         JSON.stringify({ message: "Access Denied - Admin only" }),
         { 
@@ -105,12 +105,12 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    console.log("📦 Request body:", body);
+    console.log("ðŸ“¦ Request body:", body);
     
     const { bookingId, status } = body;
 
     if (!bookingId) {
-      console.log("❌ No bookingId provided");
+      console.log("âŒ No bookingId provided");
       return new Response(
         JSON.stringify({ message: "Booking ID is required" }),
         { 
@@ -121,7 +121,7 @@ export async function POST(req) {
     }
 
     if (!["approved", "rejected", "pending"].includes(status)) {
-      console.log("❌ Invalid status:", status);
+      console.log("âŒ Invalid status:", status);
       return new Response(
         JSON.stringify({ message: "Invalid status. Must be 'approved', 'rejected', or 'pending'" }),
         { 
@@ -142,7 +142,7 @@ export async function POST(req) {
     ).populate("resortRoom");
 
     if (!booking) {
-      console.log("❌ Booking not found");
+      console.log("âŒ Booking not found");
       return new Response(
         JSON.stringify({ message: "Booking not found" }),
         { 
@@ -152,7 +152,7 @@ export async function POST(req) {
       );
     }
 
-    console.log("✅ Booking updated successfully");
+    console.log("âœ… Booking updated successfully");
     return new Response(
       JSON.stringify({
         success: true,
@@ -166,7 +166,7 @@ export async function POST(req) {
     );
 
   } catch (error) {
-    console.error("❌ Error updating booking status:", error);
+    console.error("âŒ Error updating booking status:", error);
     return new Response(
       JSON.stringify({ 
         success: false,

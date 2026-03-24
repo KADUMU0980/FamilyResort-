@@ -1,7 +1,7 @@
-"use server";
+﻿"use server";
 import nodemailer from "nodemailer";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import userModel from "@/app/utils/models/userModel";
 import connectToDatabase from "@/app/utils/configue/db";
 
@@ -42,7 +42,7 @@ People: ${booking.numberOfPeople}
 Occasion: ${booking.occasion}
 Start Date: ${booking.startDate}
 End Date: ${booking.endDate}
-Price: ₹${booking.price}
+Price: â‚¹${booking.price}
 `
   };
 

@@ -1,14 +1,14 @@
-// app/api/user/bookings/route.js
+﻿// app/api/user/bookings/route.js
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import connectToDatabase from "@/app/utils/configue/db";
 import userModel from "@/app/utils/models/userModel";
 import bookingModel from "@/app/utils/models/bookingModel";
 
 // GET - Fetch current user's bookings
-export async function GET(request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 

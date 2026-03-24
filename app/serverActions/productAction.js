@@ -1,7 +1,6 @@
-"use server"
+﻿"use server"
 import connectToDatabase from "@/app/utils/configue/db";
-import productModel from "@/app/utils/models/productModel";
-export async function productAction(productDetails){
+export async function productAction(){
     await connectToDatabase();
     
 

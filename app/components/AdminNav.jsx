@@ -1,5 +1,6 @@
-"use client"
+﻿"use client"
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 const AdminNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,7 +12,7 @@ const AdminNav = () => {
           {/* Logo */}
           <h2 className="text-2xl font-bold text-gray-800">Admin Dashboard</h2>
 
-          {/* Hamburger Button — mobile only */}
+          {/* Hamburger Button â€” mobile only */}
           <button
             className="lg:hidden flex flex-col gap-1.5 p-2"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -33,9 +34,9 @@ const AdminNav = () => {
             <a href="/admin/manage-resorts" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Manage Resorts
             </a>
-            <a href="/api/auth/signout" className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
+            <button onClick={() => signOut()} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
               Logout
-            </a>
+            </button>
           </div>
         </div>
 
@@ -51,9 +52,9 @@ const AdminNav = () => {
             <a href="/admin/manage-resorts" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Manage Resorts
             </a>
-            <a href="/api/auth/signout" className="w-fit px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
+            <button onClick={() => signOut()} className="w-fit px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
               Logout
-            </a>
+            </button>
           </div>
         )}
       </nav>

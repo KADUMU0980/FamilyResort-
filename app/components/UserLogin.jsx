@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { signIn } from "next-auth/react";
@@ -125,7 +125,7 @@ const UserLogin = () => {
                 id="password"
                 name="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

@@ -1,4 +1,4 @@
-
+﻿
 import connectToDatabase from "../../../../utils/configue/db";
 import productModel from "../../../../utils/models/productModel";
 import { NextResponse } from "next/server";

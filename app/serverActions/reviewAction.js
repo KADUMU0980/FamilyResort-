@@ -1,7 +1,7 @@
-"use server";
+﻿"use server";
 import connectToDatabase from "@/app/utils/configue/db";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import userModel from "../utils/models/userModel";
 import productModel from "../utils/models/productModel";
 

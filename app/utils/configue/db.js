@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
 export default async function connectToDatabase() {
   if (mongoose.connection.readyState === 1) {
@@ -12,13 +12,13 @@ if (mongoose.connection.readyState === 2) {
 }
 
   if (!process.env.MONGO_URL) {
-    throw new Error("❌ MONGO_URL is missing in .env");
+    throw new Error("âŒ MONGO_URL is missing in .env");
   }
 
   try {
     await mongoose.connect(process.env.MONGO_URL);
-    console.log("✅ MongoDB connected");
+    console.log("âœ… MongoDB connected");
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
+    console.error("âŒ MongoDB connection error:", error);
   }
 }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -72,7 +72,7 @@ const UserNavigation = ({ userName }) => {
 
           <a href="tel:+919849660462">
             <button className="bg-green-400 text-white px-3 py-2 rounded-lg font-small">
-              📞 Call Resort
+              Call Resort
             </button>
           </a>
 

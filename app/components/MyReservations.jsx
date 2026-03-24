@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { 
@@ -6,15 +6,12 @@ import {
   DollarSign, 
   Tag, 
   Home, 
-  Check, 
   X, 
   Clock, 
   Loader2,
-  AlertCircle,
   CheckCircle,
   XCircle,
   MapPin,
-  User,
   CalendarDays,
   CreditCard,
   Smartphone,
@@ -23,8 +20,9 @@ import {
   Lock
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
-const BookingStatusCard = ({ booking, onPaymentClick }) => {
+const BookingStatusCard = ({ booking }) => {
   const getStatusConfig = (status) => {
     const configs = {
       approved: {
@@ -115,11 +113,12 @@ const BookingStatusCard = ({ booking, onPaymentClick }) => {
 
       {/* Image */}
       {booking.image && (
-        <div className="mb-4 rounded-xl overflow-hidden shadow-md">
-          <img 
+        <div className="mb-4 rounded-xl overflow-hidden shadow-md relative h-48">
+          <Image 
             src={booking.image} 
             alt={booking.productName}
-            className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+            fill
+            className="object-cover hover:scale-105 transition-transform duration-300"
           />
         </div>
       )}
@@ -174,7 +173,7 @@ const BookingStatusCard = ({ booking, onPaymentClick }) => {
           <DollarSign className="w-6 h-6 text-green-600" />
           <div>
             <p className="text-xs text-gray-500">Total Amount</p>
-            <p className="text-2xl font-bold text-gray-900">₹{booking.price}</p>
+            <p className="text-2xl font-bold text-gray-900">â‚¹{booking.price}</p>
           </div>
         </div>
         
@@ -284,7 +283,7 @@ const MyReservations = () => {
         onClick={() => window.history.back()}
         className="text-indigo-600 hover:text-indigo-800 font-medium mb-4 flex items-center gap-2"
       >
-        ← Back to Home
+        â† Back to Home
       </button>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -506,7 +505,7 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
               </div>
               <div className="flex justify-between pt-2 border-t border-blue-200">
                 <span className="font-bold text-gray-900">Total Amount</span>
-                <span className="font-bold text-gray-900 text-xl">₹{booking.price}</span>
+                <span className="font-bold text-gray-900 text-xl">â‚¹{booking.price}</span>
               </div>
             </div>
           </div>
@@ -553,13 +552,13 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
             ) : (
               <>
                 <Lock className="w-5 h-5" />
-                Pay ₹{booking.price}
+                Pay â‚¹{booking.price}
               </>
             )}
           </button>
 
           <p className="text-xs text-center text-gray-500 mt-4">
-            🔒 Your payment information is encrypted and secure
+            ðŸ”’ Your payment information is encrypted and secure
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 import {
   MapPin,
@@ -46,11 +47,7 @@ const DynamicProduct = () => {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    dynamicProductHandler();
-  }, [id]);
-
-  const dynamicProductHandler = async () => {
+  const dynamicProductHandler = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/admin/product/${id}`);
@@ -63,7 +60,11 @@ const DynamicProduct = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    dynamicProductHandler();
+  }, [dynamicProductHandler]);
 
   const calculateTotal = (dates, type, room) => {
     if (!dates?.startDate || !dates?.endDate || !room) return 0;
@@ -300,10 +301,11 @@ Total Price: ₹${totalAmount}
             <div className="aspect-video w-full bg-black relative group">
               {displayImages.length > 0 ? (
                 <>
-                  <img
+                  <Image
                     src={displayImages[currentImageIndex]}
                     alt={`${resortRoom.title} image ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover transition-all duration-300"
+                    fill
+                    className="object-cover transition-all duration-300"
                   />
 
                   {displayImages.length > 1 && (
@@ -540,7 +542,7 @@ Total Price: ₹${totalAmount}
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-blue-600 mt-1">•</span>
-                      <span>Track your booking status in "My Reservations"</span>
+                      <span>Track your booking status in &quot;My Reservations&quot;</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-blue-600 mt-1">•</span>

@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import bcrypt from "bcrypt";
 import userModel from "@/app/utils/models/userModel";
@@ -19,5 +19,3 @@ export async function registerAction(formData) {
 
   return { success: true };
 }
-
-3

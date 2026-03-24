@@ -1,13 +1,13 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+﻿import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import connectToDatabase from "@/app/utils/configue/db";
 import userModel from "@/app/utils/models/userModel";
-import bookingModel from "@/app/utils/models/bookingModel"; // ✅ Import to register schema
-import productModel from "@/app/utils/models/productModel"; // ✅ Import to register Product schema
+import "@/app/utils/models/bookingModel"; // âœ… Import to register schema
+import "@/app/utils/models/productModel"; // âœ… Import to register Product schema
 import UsersClient from "./UsersClient";
 
 const GetUsers = async () => {
-  // 1️⃣ Get session
+  // 1ï¸âƒ£ Get session
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -20,7 +20,7 @@ const GetUsers = async () => {
     );
   }
 
-  // 2️⃣ Only admin can access
+  // 2ï¸âƒ£ Only admin can access
   if (session.user.role !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -31,16 +31,16 @@ const GetUsers = async () => {
     );
   }
 
-  // 3️⃣ Connect DB
+  // 3ï¸âƒ£ Connect DB
   await connectToDatabase();
 
-  // 4️⃣ Fetch users + FULL booking details
+  // 4ï¸âƒ£ Fetch users + FULL booking details
   const users = await userModel
     .find({ role: "user" })
     .select("-password")
     .populate({
       path: "bookings",
-      model: "booking", // ✅ Match your model name
+      model: "booking", // âœ… Match your model name
       populate: {
         path: "resortRoom",
         model: "Product"
@@ -48,7 +48,7 @@ const GetUsers = async () => {
     })
     .lean();
 
-  // 5️⃣ Serialize data for client (convert MongoDB objects to plain objects)
+  // 5ï¸âƒ£ Serialize data for client (convert MongoDB objects to plain objects)
   const serializedUsers = JSON.parse(JSON.stringify(users));
 
   return <UsersClient users={serializedUsers} />;

@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from "react";
-import { 
-  Home, Tag, DollarSign, Loader2, AlertCircle, MapPin, Star,
+import {
+  Home, DollarSign, Loader2, AlertCircle, MapPin, Star,
   Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp
 } from "lucide-react";
+import Image from "next/image";
 
 const ProductCollection = () => {
   const [collection, setCollection] = useState([]);
@@ -11,7 +12,7 @@ const ProductCollection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
-  
+
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 150000 });
@@ -26,12 +27,12 @@ const ProductCollection = () => {
   const collectionHandler = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch("/api/admin/add-product", {
         method: "GET",
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.status}`);
       }
@@ -108,7 +109,7 @@ const ProductCollection = () => {
     setSortBy("featured");
   };
 
-  const activeFiltersCount = 
+  const activeFiltersCount =
     (searchQuery ? 1 : 0) +
     (priceRange.min > 0 || priceRange.max < 150000 ? 1 : 0) +
     selectedAmenities.length;
@@ -148,7 +149,7 @@ const ProductCollection = () => {
         {/* Header with Search */}
         <div className="mb-6">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Available Resorts</h1>
-          
+
           {/* Search Bar */}
           <div className="flex gap-3 flex-wrap">
             <div className="flex-1 min-w-[250px] relative">
@@ -251,7 +252,7 @@ const ProductCollection = () => {
                 <h3 className="font-semibold text-gray-900">Price Range</h3>
                 {showPriceFilter ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
-              
+
               {showPriceFilter && (
                 <div className="space-y-3">
                   <div>
@@ -291,7 +292,7 @@ const ProductCollection = () => {
                 <h3 className="font-semibold text-gray-900">Amenities</h3>
                 {showAmenitiesFilter ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
-              
+
               {showAmenitiesFilter && (
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {allAmenities.map((amenity) => (
@@ -355,12 +356,13 @@ const ProductCollection = () => {
                   <a key={item._id} className="group" href={`/detail/${item._id}`}>
                     <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
                       <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
-                        <img
+                        <Image
                           src={item.image || "https://images.unsplash.com/photo-1566073771259-6a8506099945"}
                           alt={item.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-110"
                         />
-                        
+
                         {item.offer && (
                           <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                             {item.offer}
@@ -414,7 +416,7 @@ const ProductCollection = () => {
                             </div>
                           </div>
 
-                          <a 
+                          <a
                             href={`/detail/${item._id}`}
                             className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors group-hover:shadow-lg inline-block"
                           >

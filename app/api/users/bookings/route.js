@@ -1,6 +1,6 @@
-// app/api/users/bookings/route.js
+﻿// app/api/users/bookings/route.js
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import connectToDatabase from "@/app/utils/configue/db";
 import userModel from "@/app/utils/models/userModel";
 import bookingModel from "@/app/utils/models/bookingModel"; // Import booking model

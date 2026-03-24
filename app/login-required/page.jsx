@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 export default function LoginRequiredPage() {
     return (
@@ -6,7 +6,7 @@ export default function LoginRequiredPage() {
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow-xl rounded-3xl sm:px-10 border border-gray-100 text-center">
                     <div className="mx-auto flex flex-col items-center justify-center w-20 h-20 bg-blue-50 rounded-full mb-6">
-                        <span className="text-4xl">🔒</span>
+                        <span className="text-4xl">ðŸ”’</span>
                     </div>
 
                     <h2 className="text-3xl font-extrabold text-gray-900 mb-4">

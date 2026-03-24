@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+﻿import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 import UserProfile from "@/app/components/UserProfile"; // Adjust path as needed
 import userModel from "@/app/utils/models/userModel";

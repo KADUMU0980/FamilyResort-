@@ -1,4 +1,4 @@
-import ManageResorts from "../../components/ManageResorts";
+﻿import ManageResorts from "../../components/ManageResorts";
 
 const ManageResortsPage = async () => {
   return (

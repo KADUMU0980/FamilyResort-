@@ -1,4 +1,4 @@
-// app/api/admin/add-product/route.js
+﻿// app/api/admin/add-product/route.js
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
 import connectToDatabase from "@/app/utils/configue/db";
@@ -110,7 +110,7 @@ export async function POST(request) {
     const desc = data.get("desc");
     const profileImage = data.get("profileImage");
 
-    // ✅ Use getAll() to grab all carousel images under the same key
+    // âœ… Use getAll() to grab all carousel images under the same key
     const carouselImages = data.getAll("carouselImages");
     console.log("Profile Image:", profileImage?.name, "Carousel Count:", carouselImages.length);
 

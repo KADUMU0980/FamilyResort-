@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { 
-  Edit, Trash2, Eye, EyeOff, Image as ImageIcon, 
-  Search, Filter, Plus, CheckSquare, Square, X 
+  Edit, Trash2, Eye, EyeOff, 
+  Search, Filter, CheckSquare, Square, X 
 } from "lucide-react";
 
 const ManageResorts = () => {
@@ -295,10 +296,11 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
     <div className={`bg-white rounded-xl shadow-md overflow-hidden transition-all duration-200 hover:shadow-xl ${isSelected ? 'ring-4 ring-blue-500' : ''}`}>
       {/* Image */}
       <div className="relative h-48">
-        <img
+        <Image
           src={resort.image || '/placeholder.jpg'}
           alt={resort.title}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
         
         {/* Select Checkbox */}
@@ -326,7 +328,7 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
         <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">{resort.title}</h3>
         
         <div className="space-y-2 mb-4">
-          <p className="text-2xl font-bold text-blue-600">₹{resort.price}</p>
+          <p className="text-2xl font-bold text-blue-600">â‚¹{resort.price}</p>
           {resort.offer && (
             <p className="text-sm text-green-600 font-medium">{resort.offer}</p>
           )}

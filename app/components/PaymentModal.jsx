@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { 
   CreditCard, 
   Smartphone, 
@@ -123,7 +123,7 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
               </div>
               <div className="flex justify-between pt-2 border-t border-blue-200">
                 <span className="font-bold text-gray-900">Total Amount</span>
-                <span className="font-bold text-gray-900 text-xl">₹{booking.price}</span>
+                <span className="font-bold text-gray-900 text-xl">â‚¹{booking.price}</span>
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
                 Processing Payment...
               </>
             ) : (
-              `Pay ₹${booking.price}`
+              `Pay â‚¹${booking.price}`
             )}
           </button>
 
