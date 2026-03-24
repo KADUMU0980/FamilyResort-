@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { registerAction } from "@/app/serverActions/registerAction";
 
+
 const validationSchema = Yup.object({
   name: Yup.string()
     .min(2, "Name must be at least 2 characters")
@@ -27,11 +28,13 @@ const validationSchema = Yup.object({
     .required("Please confirm your password"),
 });
 
+
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
+
 
   const formik = useFormik({
     initialValues: {
@@ -46,6 +49,7 @@ export default function RegisterPage() {
       setLoading(true);
       setServerError("");
 
+
       try {
         const formData = new FormData();
         formData.append("name", values.name);
@@ -53,11 +57,14 @@ export default function RegisterPage() {
         formData.append("phoneNumber", values.phoneNumber);
         formData.append("password", values.password);
 
+
         const data = await registerAction(formData);
+
 
         if (data.success) {
           setSuccess(true);
           formik.resetForm();
+
 
           setTimeout(() => {
             router.push("/login");
@@ -73,8 +80,9 @@ export default function RegisterPage() {
     },
   });
 
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Back to Home Link */}
         <div className="mb-6 text-center">
@@ -99,30 +107,17 @@ export default function RegisterPage() {
           </Link>
         </div>
 
+
         {/* Registration Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8 space-y-6 border border-gray-100">
+        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                />
-              </svg>
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Create Account
             </h1>
             <p className="text-gray-600">Join us and get started today</p>
           </div>
+
 
           {/* Form */}
           <form onSubmit={formik.handleSubmit} className="space-y-5">
@@ -142,24 +137,18 @@ export default function RegisterPage() {
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none ${formik.touched.name && formik.errors.name
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.name && formik.errors.name
+                  ? "border-red-500"
+                  : "border-gray-300"
                   }`}
               />
               {formik.touched.name && formik.errors.name && (
-                <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <p className="text-xs text-red-600 mt-1">
                   {formik.errors.name}
                 </p>
               )}
             </div>
+
 
             {/* Email Input */}
             <div>
@@ -177,24 +166,18 @@ export default function RegisterPage() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none ${formik.touched.email && formik.errors.email
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.email && formik.errors.email
+                  ? "border-red-500"
+                  : "border-gray-300"
                   }`}
               />
               {formik.touched.email && formik.errors.email && (
-                <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <p className="text-xs text-red-600 mt-1">
                   {formik.errors.email}
                 </p>
               )}
             </div>
+
 
             {/* Phone Number Input */}
             <div>
@@ -212,24 +195,18 @@ export default function RegisterPage() {
                 value={formik.values.phoneNumber}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none ${formik.touched.phoneNumber && formik.errors.phoneNumber
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.phoneNumber && formik.errors.phoneNumber
+                  ? "border-red-500"
+                  : "border-gray-300"
                   }`}
               />
               {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <p className="text-xs text-red-600 mt-1">
                   {formik.errors.phoneNumber}
                 </p>
               )}
             </div>
+
 
             {/* Password Input */}
             <div>
@@ -247,20 +224,13 @@ export default function RegisterPage() {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none ${formik.touched.password && formik.errors.password
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.password && formik.errors.password
+                  ? "border-red-500"
+                  : "border-gray-300"
                   }`}
               />
               {formik.touched.password && formik.errors.password ? (
-                <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <p className="text-xs text-red-600 mt-1">
                   {formik.errors.password}
                 </p>
               ) : (
@@ -269,6 +239,7 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
+
 
             {/* Confirm Password Input */}
             <div>
@@ -286,26 +257,20 @@ export default function RegisterPage() {
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none ${formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                  ? "border-red-500"
+                  : "border-gray-300"
                   }`}
               />
               {formik.touched.confirmPassword &&
                 formik.errors.confirmPassword && (
-                  <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                  <p className="text-xs text-red-600 mt-1">
                     {formik.errors.confirmPassword}
                   </p>
                 )}
             </div>
+
 
             {/* Server Error Message */}
             {serverError && (
@@ -325,6 +290,7 @@ export default function RegisterPage() {
               </div>
             )}
 
+
             {/* Success Message */}
             {success && (
               <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
@@ -343,11 +309,12 @@ export default function RegisterPage() {
               </div>
             )}
 
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading || success || !formik.isValid || !formik.dirty}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -374,74 +341,49 @@ export default function RegisterPage() {
                   Creating Account...
                 </>
               ) : (
-                <>
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                    />
-                  </svg>
-                  Create Account
-                </>
+              "Create Account"
               )}
-            </button>
-          </form>
+          </button>
+        </form>
 
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">
-                Already have an account?
-              </span>
-            </div>
+
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
           </div>
-
-          {/* Login Link */}
-          <div className="text-center">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-800 font-medium transition-colors"
-            >
-              Sign in instead
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </Link>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">
+              Already have an account?
+            </span>
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
-          By creating an account, you agree to our{" "}
-          <Link href="/terms" className="text-purple-600 hover:underline">
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link href="/privacy" className="text-purple-600 hover:underline">
-            Privacy Policy
+
+        {/* Login Link */}
+        <div className="text-center">
+          <Link
+            href="/login"
+            className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          >
+            Sign in instead
           </Link>
-        </p>
+        </div>
       </div>
+
+
+      {/* Footer */}
+      <p className="text-center text-sm text-gray-600 mt-6">
+        By creating an account, you agree to our{" "}
+        <Link href="/terms" className="text-blue-600 hover:underline">
+          Terms of Service
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="text-blue-600 hover:underline">
+          Privacy Policy
+        </Link>
+      </p>
     </div>
+    </div >
   );
 }
