@@ -1,4 +1,4 @@
-﻿// app/api/admin/add-product/route.js
+// app/api/admin/add-product/route.js
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
 import connectToDatabase from "@/app/utils/configue/db";
@@ -108,13 +108,11 @@ export async function POST(request) {
     const offer = data.get("offer");
     const amen = data.get("amen");
     const desc = data.get("desc");
-    const profileImage = data.get("profileImage");
-
-    // âœ… Use getAll() to grab all carousel images under the same key
+    const profileImages = data.getAll("profileImages");
     const carouselImages = data.getAll("carouselImages");
-    console.log("Profile Image:", profileImage?.name, "Carousel Count:", carouselImages.length);
+    console.log("Profile Count:", profileImages.length, "Carousel Count:", carouselImages.length);
 
-    if (!profileImage || typeof profileImage.arrayBuffer !== "function") {
+    if (profileImages.length === 0) {
       return NextResponse.json(
         { success: false, message: "No profile image uploaded" },
         { status: 400 }
@@ -124,18 +122,23 @@ export async function POST(request) {
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadDir, { recursive: true });
 
-    // Handle Profile Image
-    const profileBuffer = Buffer.from(await profileImage.arrayBuffer());
-    await writeFile(path.join(uploadDir, profileImage.name), profileBuffer);
-    const profileImageUrl = `/uploads/${profileImage.name}`;
+    // Handle Profile Images
+    const uploadedProfileUrls = [];
+    for (const img of profileImages) {
+      if (typeof img.arrayBuffer === "function") {
+        const buffer = Buffer.from(await img.arrayBuffer());
+        await writeFile(path.join(uploadDir, img.name), buffer);
+        uploadedProfileUrls.push(`/uploads/${img.name}`);
+      }
+    }
 
     // Handle Carousel Images
-    const uploadedImageUrls = [];
+    const uploadedCarouselUrls = [];
     for (const img of carouselImages) {
       if (typeof img.arrayBuffer === "function") {
         const buffer = Buffer.from(await img.arrayBuffer());
         await writeFile(path.join(uploadDir, img.name), buffer);
-        uploadedImageUrls.push(`/uploads/${img.name}`);
+        uploadedCarouselUrls.push(`/uploads/${img.name}`);
       }
     }
 
@@ -147,8 +150,10 @@ export async function POST(request) {
       offer,
       amen,
       desc,
-      image: profileImageUrl,
-      images: uploadedImageUrls,
+      image: uploadedProfileUrls[0] || "", // maintain backward compatibility
+      images: uploadedCarouselUrls, // maintain backward compatibility
+      profileImages: uploadedProfileUrls,
+      carouselImages: uploadedCarouselUrls,
     });
 
     return NextResponse.json({ success: true, product: newProduct }, { status: 200 });

@@ -117,7 +117,7 @@ const UserNavigation = ({ userName }) => {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/user"
+            href="/"
             className={`p-3 rounded-lg transition-all ${isActive('/user')
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'text-gray-700 hover:bg-blue-50'
@@ -188,17 +188,6 @@ const UserNavigation = ({ userName }) => {
 
           {/* Icon Navigation - Always Visible */}
           <div className="flex items-center gap-1">
-            <Link
-              href="/user"
-              className={`p-2.5 rounded-lg transition-all ${isActive('/user')
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-blue-50'
-                }`}
-              title="Home"
-            >
-              <Home className="w-5 h-5" />
-            </Link>
-
             <Link
               href="/user/bookings"
               className={`p-2.5 rounded-lg transition-all ${isActive('/user/bookings')

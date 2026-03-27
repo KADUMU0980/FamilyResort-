@@ -29,6 +29,8 @@ const DynamicProduct = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showGallery, setShowGallery] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDates, setSelectedDates] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -262,7 +264,16 @@ Total Price: ₹${totalAmount}
     );
   }
 
-  const displayImages = resortRoom?.images?.length > 0 ? resortRoom.images : [resortRoom?.image].filter(Boolean);
+  const displayImages = resortRoom 
+    ? [...(resortRoom.profileImages || []), ...(resortRoom.carouselImages || [])].length > 0 
+      ? [...(resortRoom.profileImages || []), ...(resortRoom.carouselImages || [])]
+      : (resortRoom.images?.length > 0 ? resortRoom.images : [resortRoom?.image].filter(Boolean))
+    : [];
+
+  const openGallery = (index = 0) => {
+    setGalleryIndex(index);
+    setShowGallery(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -295,57 +306,153 @@ Total Price: ₹${totalAmount}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-
-          <div className="lg:col-span-2 order-1 bg-white rounded-3xl shadow-xl overflow-hidden">
-            <div className="aspect-video w-full bg-black relative group">
-              {displayImages.length > 0 ? (
-                <>
+        {/* Fullscreen Gallery Modal */}
+        {showGallery && (
+          <div className="fixed inset-0 z-50 bg-black/95 flex flex-col">
+            <div className="absolute top-6 right-6 z-50 flex gap-4">
+              <button 
+                onClick={() => setShowGallery(false)}
+                className="bg-white/20 hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                aria-label="Close Gallery"
+              >
+                âœ•
+              </button>
+            </div>
+            
+            <div className="flex-1 relative flex items-center justify-center p-4">
+              {displayImages.length > 0 && (
+                <div className="relative w-full max-w-5xl aspect-video">
                   <Image
-                    src={displayImages[currentImageIndex]}
-                    alt={`${resortRoom.title} image ${currentImageIndex + 1}`}
+                    src={displayImages[galleryIndex]}
+                    alt={`Gallery image ${galleryIndex + 1}`}
                     fill
-                    className="object-cover transition-all duration-300"
+                    className="object-contain"
                   />
+                </div>
+              )}
 
-                  {displayImages.length > 1 && (
-                    <>
-                      {/* Left Button */}
-                      <button
-                        onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1))}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                        aria-label="Previous image"
-                      >
-                        <ChevronLeft className="w-6 h-6" />
-                      </button>
-
-                      {/* Right Button */}
-                      <button
-                        onClick={() => setCurrentImageIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1))}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                        aria-label="Next image"
-                      >
-                        <ChevronRight className="w-6 h-6" />
-                      </button>
-
-                      {/* Dots Indicator */}
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                        {displayImages.map((_, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => setCurrentImageIndex(idx)}
-                            className={`w-2.5 h-2.5 rounded-full transition-all ${currentImageIndex === idx ? "bg-white scale-125" : "bg-white/50 hover:bg-white/80"
-                              }`}
-                            aria-label={`Go to image ${idx + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
+              {/* Controls */}
+              {displayImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setGalleryIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1))}
+                    className="absolute left-4 md:left-10 bg-white/10 hover:bg-white/30 text-white p-3 rounded-full transition-colors"
+                  >
+                    <ChevronLeft className="w-8 h-8" />
+                  </button>
+                  <button
+                    onClick={() => setGalleryIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1))}
+                    className="absolute right-4 md:right-10 bg-white/10 hover:bg-white/30 text-white p-3 rounded-full transition-colors"
+                  >
+                    <ChevronRight className="w-8 h-8" />
+                  </button>
                 </>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-white/50">
-                  No images available
+              )}
+            </div>
+            
+            {/* Thumbnail Navigation */}
+            <div className="h-24 md:h-32 bg-black/50 overflow-x-auto flex items-center gap-2 p-4 snap-x hide-scrollbar">
+              {displayImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setGalleryIndex(idx)}
+                  className={`relative h-full aspect-video flex-shrink-0 rounded overflow-hidden opacity-50 transition-all ${galleryIndex === idx ? 'opacity-100 ring-2 ring-white scale-105' : 'hover:opacity-75'}`}
+                >
+                  <Image src={img} alt={`Thumb ${idx}`} fill className="object-cover" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="grid lg:grid-cols-3 gap-8 relative z-10">
+
+          <div className="lg:col-span-2 order-1 space-y-8">
+            {/* --- GALLERY DESKTOP --- */}
+            <div className="hidden lg:grid grid-cols-4 grid-rows-2 gap-2 h-[450px] rounded-3xl overflow-hidden shadow-xl">
+              {displayImages.length === 1 && (
+                <div className="col-span-4 row-span-2 relative cursor-pointer" onClick={() => openGallery(0)}>
+                  <Image src={displayImages[0]} alt="main" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                </div>
+              )}
+              {displayImages.length === 2 && (
+                <>
+                  <div className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
+                    <Image src={displayImages[0]} alt="main" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  <div className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
+                    <Image src={displayImages[1]} alt="main" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                  </div>
+                </>
+              )}
+              {displayImages.length >= 3 && (
+                <>
+                  <div className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden group" onClick={() => openGallery(0)}>
+                    <Image src={displayImages[0]} alt="main" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  
+                  {displayImages.slice(1, 5).map((img, idx) => {
+                    // Decide grid placement based on number of images
+                    const totalImgs = displayImages.length;
+                    const isLastShown = idx === 3 || (totalImgs === 3 && idx === 1) || (totalImgs === 4 && idx === 2);
+                    
+                    let classes = "relative cursor-pointer overflow-hidden group";
+                    if (totalImgs === 3) classes += " col-span-2 row-span-1";
+                    else if (totalImgs === 4) {
+                       if (idx === 0) classes += " col-span-2 row-span-1"; // Top right takes full width
+                       else classes += " col-span-1 row-span-1"; // Bottom 2 take half width
+                    }
+                    else classes += " col-span-1 row-span-1"; // 5+ images
+                    
+                    return (
+                      <div key={idx} className={classes} onClick={() => openGallery(idx + 1)}>
+                        <Image src={img} alt={`grid-${idx}`} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                        
+                        {/* Overlay for additional images */}
+                        {isLastShown && displayImages.length > 5 && (
+                           <div className="absolute inset-0 bg-black/60 hover:bg-black/70 flex items-center justify-center text-white text-xl font-bold transition-colors">
+                             +{displayImages.length - 5}
+                           </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+              {displayImages.length === 0 && (
+                 <div className="col-span-4 row-span-2 bg-gray-200 flex items-center justify-center text-gray-500">
+                   No images available
+                 </div>
+              )}
+            </div>
+
+            {/* --- GALLERY MOBILE (Swipeable Carousel) --- */}
+            <div className="lg:hidden relative rounded-2xl overflow-hidden shadow-lg group">
+              <div 
+                className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar h-[350px] relative scroll-smooth"
+                id="mobile-carousel"
+                onScroll={(e) => {
+                  const width = e.currentTarget.clientWidth;
+                  const newIndex = Math.round(e.currentTarget.scrollLeft / width);
+                  if (currentImageIndex !== newIndex) setCurrentImageIndex(newIndex);
+                }}
+              >
+                {displayImages.map((img, idx) => (
+                  <div key={idx} className="min-w-full h-full snap-start relative cursor-pointer" onClick={() => openGallery(idx)}>
+                    <Image src={img} alt={`mobile-${idx}`} fill className="object-cover" />
+                  </div>
+                ))}
+                {displayImages.length === 0 && (
+                   <div className="min-w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                     No images available
+                   </div>
+                )}
+              </div>
+              
+              {/* Image counter indicator */}
+              {displayImages.length > 1 && (
+                <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
+                  {currentImageIndex + 1} / {displayImages.length}
                 </div>
               )}
             </div>

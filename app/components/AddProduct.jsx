@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
@@ -10,15 +10,35 @@ const AddProduct = () => {
   const [amen, setAmen] = useState("");
   const [desc, setDesc] = useState("");
 
-  const profileImageRef = useRef(null);
-  const [profilePreview, setProfilePreview] = useState(null);
+  const [profileImages, setProfileImages] = useState([]); // { file, preview }
   const [carouselImages, setCarouselImages] = useState([]); // { file, preview }
 
   const handleProfileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setProfilePreview(URL.createObjectURL(file));
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    if (profileImages.length + files.length > 5) {
+      alert("You can only upload up to 5 profile images.");
+      return;
     }
+
+    const newEntries = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setProfileImages((prev) => [...prev, ...newEntries]);
+
+    setTimeout(() => {
+      e.target.value = "";
+    }, 0);
+  };
+
+  const removeProfileImage = (index) => {
+    setProfileImages((prev) => {
+      URL.revokeObjectURL(prev[index].preview);
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const handleCarouselChange = (e) => {
@@ -49,9 +69,8 @@ const AddProduct = () => {
   const recordHandler = async (e) => {
     e.preventDefault();
 
-    const profileImageFile = profileImageRef.current?.files[0];
-    if (!profileImageFile) {
-      alert("Please select a profile image before submitting.");
+    if (profileImages.length === 0) {
+      alert("Please select at least one profile image before submitting.");
       return;
     }
 
@@ -61,7 +80,10 @@ const AddProduct = () => {
     formData.append("offer", offer);
     formData.append("amen", amen);
     formData.append("desc", desc);
-    formData.append("profileImage", profileImageFile);
+
+    profileImages.forEach(({ file }) => {
+      formData.append("profileImages", file);
+    });
 
     // âœ… Use the same key "carouselImages" for all â€” standard multi-file pattern
     carouselImages.forEach(({ file }) => {
@@ -92,8 +114,7 @@ const AddProduct = () => {
         setAmen("");
         setDesc("");
         setCarouselImages([]);
-        setProfilePreview(null);
-        if (profileImageRef.current) profileImageRef.current.value = "";
+        setProfileImages([]);
       } else {
         alert("Failed to add product: " + result.message);
       }
@@ -144,17 +165,36 @@ const AddProduct = () => {
             placeholder="Enter product description" />
         </div>
 
-        {/* Profile Image */}
+        {/* Profile Images */}
         <div>
           <label className="block font-semibold text-gray-700">
-            Upload Profile Image (Single)
+            Upload Profile Images (Max 5)
           </label>
-          <input type="file" ref={profileImageRef} onChange={handleProfileChange}
-            className="w-full border px-3 py-2 rounded bg-gray-50" accept="image/*" required />
-          <p className="text-xs text-gray-500 mt-1">Shown on the main listings page.</p>
-          {profilePreview && (
-            <Image src={profilePreview} alt="Profile preview" width={96} height={96}
-              className="mt-2 h-24 w-24 object-cover rounded border" />
+          <input type="file" onChange={handleProfileChange}
+            className="w-full border px-3 py-2 rounded bg-gray-50" accept="image/*" multiple />
+          <p className="text-xs text-gray-500 mt-1 mb-2">Shown on the main listings page.</p>
+
+          {profileImages.length > 0 && (
+            <div className="bg-gray-50 p-3 rounded-lg border">
+              <span className="text-sm font-semibold block mb-2">
+                {profileImages.length} image(s) staged:
+              </span>
+              <div className="flex flex-wrap gap-3">
+                {profileImages.map(({ file, preview }, index) => (
+                  <div key={index} className="relative group">
+                    <Image src={preview} alt={file.name} width={80} height={80}
+                      className="h-20 w-20 object-cover rounded border" />
+                    <button type="button" onClick={() => removeProfileImage(index)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full
+                                 w-5 h-5 text-xs flex items-center justify-center
+                                 opacity-0 group-hover:opacity-100 transition-opacity">
+                      âœ•
+                    </button>
+                    <p className="text-xs text-gray-500 truncate w-20 mt-1">{file.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 

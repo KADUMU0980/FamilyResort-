@@ -1,4 +1,4 @@
-﻿import mongoose from "mongoose";
+import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -8,6 +8,8 @@ const productSchema = new mongoose.Schema({
   desc: { type: String },
   image: { type: String },
   images: { type: [String], default: [] },
+  profileImages: { type: [String], default: [] },
+  carouselImages: { type: [String], default: [] },
   amen: {
     type: [String],
     required: true,
