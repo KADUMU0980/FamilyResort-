@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
+import imageCompression from "browser-image-compression";
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
@@ -13,8 +14,9 @@ const AddProduct = () => {
   const [profileImages, setProfileImages] = useState([]); // { file, preview }
   const [carouselImages, setCarouselImages] = useState([]); // { file, preview }
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
 
-  const handleProfileChange = (e) => {
+  const handleProfileChange = async (e) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
@@ -23,16 +25,44 @@ const AddProduct = () => {
       return;
     }
 
-    const newEntries = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
+    setIsCompressing(true);
+    const options = {
+      maxSizeMB: 1.5,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+
+    const newEntries = [];
+    for (const file of files) {
+      try {
+        let processedFile = file;
+        
+        // Compress if larger than 1.5MB
+        if (file.size > 1.5 * 1024 * 1024) {
+          processedFile = await imageCompression(file, options);
+        }
+
+        // Check if size is still over Cloudinary 10MB limit
+        if (processedFile.size > 10 * 1024 * 1024) {
+          alert(`File ${file.name} is still over 10MB after compression. Please choose a smaller image.`);
+          continue;
+        }
+
+        newEntries.push({
+          file: processedFile,
+          preview: URL.createObjectURL(processedFile),
+        });
+      } catch (error) {
+        console.error("Error compressing profile image:", error);
+        alert(`Failed to process ${file.name}.`);
+      }
+    }
 
     setProfileImages((prev) => [...prev, ...newEntries]);
-
     setTimeout(() => {
       e.target.value = "";
     }, 0);
+    setIsCompressing(false);
   };
 
   const removeProfileImage = (index) => {
@@ -42,22 +72,46 @@ const AddProduct = () => {
     });
   };
 
-  const handleCarouselChange = (e) => {
+  const handleCarouselChange = async (e) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    const newEntries = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
+    setIsCompressing(true);
+    const options = {
+      maxSizeMB: 1.5,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
 
-    // Capture files before clearing input
+    const newEntries = [];
+    for (const file of files) {
+      try {
+        let processedFile = file;
+        
+        if (file.size > 1.5 * 1024 * 1024) {
+          processedFile = await imageCompression(file, options);
+        }
+
+        if (processedFile.size > 10 * 1024 * 1024) {
+          alert(`File ${file.name} is still over 10MB after compression. Please choose a smaller image.`);
+          continue;
+        }
+
+        newEntries.push({
+          file: processedFile,
+          preview: URL.createObjectURL(processedFile),
+        });
+      } catch (error) {
+        console.error("Error compressing carousel image:", error);
+        alert(`Failed to process ${file.name}.`);
+      }
+    }
+
     setCarouselImages((prev) => [...prev, ...newEntries]);
-
-    // Reset input AFTER capturing files
     setTimeout(() => {
       e.target.value = "";
     }, 0);
+    setIsCompressing(false);
   };
 
   const removeCarouselImage = (index) => {
@@ -78,30 +132,38 @@ const AddProduct = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Upload Profile Images individually to avoid payload size limits
+      // Get Cloudinary upload signature to bypass Vercel 4.5MB body limit
+      const sigRes = await fetch("/api/upload/signature");
+      if (!sigRes.ok) throw new Error("Failed to get upload signature");
+      const { timestamp, signature, cloudName, apiKey } = await sigRes.json();
+
+      const uploadToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append("api_key", apiKey);
+        formData.append("timestamp", timestamp);
+        formData.append("signature", signature);
+        formData.append("folder", "resorts");
+        formData.append("file", file);
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error?.message || "Cloudinary upload failed");
+        return data.secure_url;
+      };
+
+      // 1. Upload Profile Images directly to Cloudinary
       const uploadedProfileUrls = await Promise.all(
-        profileImages.map(async ({ file }) => {
-          const fd = new FormData();
-          fd.append("images", file);
-          const res = await fetch("/api/upload", { method: "POST", body: fd });
-          const data = await res.json();
-          if (!data.success) throw new Error("Profile image upload failed: " + (data.error || data.message));
-          return data.images[0];
-        })
+        profileImages.map(({ file }) => uploadToCloudinary(file))
       );
 
-      // 2. Upload Carousel Images individually to avoid payload size limits
+      // 2. Upload Carousel Images directly to Cloudinary
       let uploadedCarouselUrls = [];
       if (carouselImages.length > 0) {
         uploadedCarouselUrls = await Promise.all(
-          carouselImages.map(async ({ file }) => {
-            const fd = new FormData();
-            fd.append("images", file);
-            const res = await fetch("/api/upload", { method: "POST", body: fd });
-            const data = await res.json();
-            if (!data.success) throw new Error("Carousel image upload failed: " + (data.error || data.message));
-            return data.images[0];
-          })
+          carouselImages.map(({ file }) => uploadToCloudinary(file))
         );
       }
       const formData = new FormData();
@@ -263,11 +325,11 @@ const AddProduct = () => {
           )}
         </div>
 
-        <button type="submit" disabled={isSubmitting}
+        <button type="submit" disabled={isSubmitting || isCompressing}
           className={`w-full py-3 rounded-lg font-semibold text-white transition-colors ${
-            isSubmitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            isSubmitting || isCompressing ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
           }`}>
-          {isSubmitting ? "Uploading & Adding Product..." : "Add Product"}
+          {isSubmitting ? "Uploading & Adding Product..." : isCompressing ? "Compressing Images..." : "Add Product"}
         </button>
       </form>
     </div>
