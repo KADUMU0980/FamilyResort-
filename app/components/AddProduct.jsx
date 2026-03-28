@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
@@ -12,6 +12,7 @@ const AddProduct = () => {
 
   const [profileImages, setProfileImages] = useState([]); // { file, preview }
   const [carouselImages, setCarouselImages] = useState([]); // { file, preview }
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleProfileChange = (e) => {
     const files = Array.from(e.target.files || []);
@@ -74,23 +75,50 @@ const AddProduct = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("price", price);
-    formData.append("offer", offer);
-    formData.append("amen", amen);
-    formData.append("desc", desc);
-
-    profileImages.forEach(({ file }) => {
-      formData.append("profileImages", file);
-    });
-
-    // âœ… Use the same key "carouselImages" for all â€” standard multi-file pattern
-    carouselImages.forEach(({ file }) => {
-      formData.append("carouselImages", file);
-    });
+    setIsSubmitting(true);
 
     try {
+      // 1. Upload Profile Images individually to avoid payload size limits
+      const uploadedProfileUrls = await Promise.all(
+        profileImages.map(async ({ file }) => {
+          const fd = new FormData();
+          fd.append("images", file);
+          const res = await fetch("/api/upload", { method: "POST", body: fd });
+          const data = await res.json();
+          if (!data.success) throw new Error("Profile image upload failed: " + (data.error || data.message));
+          return data.images[0];
+        })
+      );
+
+      // 2. Upload Carousel Images individually to avoid payload size limits
+      let uploadedCarouselUrls = [];
+      if (carouselImages.length > 0) {
+        uploadedCarouselUrls = await Promise.all(
+          carouselImages.map(async ({ file }) => {
+            const fd = new FormData();
+            fd.append("images", file);
+            const res = await fetch("/api/upload", { method: "POST", body: fd });
+            const data = await res.json();
+            if (!data.success) throw new Error("Carousel image upload failed: " + (data.error || data.message));
+            return data.images[0];
+          })
+        );
+      }
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("price", price);
+      formData.append("offer", offer);
+      formData.append("amen", amen);
+      formData.append("desc", desc);
+
+      uploadedProfileUrls.forEach((url) => {
+        formData.append("profileImages", url);
+      });
+
+      uploadedCarouselUrls.forEach((url) => {
+        formData.append("carouselImages", url);
+      });
+
       const response = await fetch("/api/admin/add-product", {
         method: "POST",
         body: formData,
@@ -120,7 +148,9 @@ const AddProduct = () => {
       }
     } catch (error) {
       console.error("Error adding product:", error);
-      alert("Network error. Try again.");
+      alert(error.message || "Network error. Try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -233,9 +263,11 @@ const AddProduct = () => {
           )}
         </div>
 
-        <button type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
-          Add Product
+        <button type="submit" disabled={isSubmitting}
+          className={`w-full py-3 rounded-lg font-semibold text-white transition-colors ${
+            isSubmitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}>
+          {isSubmitting ? "Uploading & Adding Product..." : "Add Product"}
         </button>
       </form>
     </div>

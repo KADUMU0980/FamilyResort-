@@ -312,10 +312,10 @@ Total Price: ₹${totalAmount}
             <div className="absolute top-6 right-6 z-50 flex gap-4">
               <button 
                 onClick={() => setShowGallery(false)}
-                className="bg-white/20 hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                className="bg-white hover:bg-white/40 text-red-600 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
                 aria-label="Close Gallery"
               >
-                âœ•
+                ✕
               </button>
             </div>
             

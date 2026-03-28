@@ -108,38 +108,18 @@ export async function POST(request) {
     const offer = data.get("offer");
     const amen = data.get("amen");
     const desc = data.get("desc");
-    const profileImages = data.getAll("profileImages");
-    const carouselImages = data.getAll("carouselImages");
-    console.log("Profile Count:", profileImages.length, "Carousel Count:", carouselImages.length);
+    
+    // Since we're appending Cloudinary URL strings from frontend using FormData:
+    const uploadedProfileUrls = data.getAll("profileImages");
+    const uploadedCarouselUrls = data.getAll("carouselImages");
+    
+    console.log("Profile URLs:", uploadedProfileUrls.length, "Carousel URLs:", uploadedCarouselUrls.length);
 
-    if (profileImages.length === 0) {
+    if (uploadedProfileUrls.length === 0) {
       return NextResponse.json(
         { success: false, message: "No profile image uploaded" },
         { status: 400 }
       );
-    }
-
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
-
-    // Handle Profile Images
-    const uploadedProfileUrls = [];
-    for (const img of profileImages) {
-      if (typeof img.arrayBuffer === "function") {
-        const buffer = Buffer.from(await img.arrayBuffer());
-        await writeFile(path.join(uploadDir, img.name), buffer);
-        uploadedProfileUrls.push(`/uploads/${img.name}`);
-      }
-    }
-
-    // Handle Carousel Images
-    const uploadedCarouselUrls = [];
-    for (const img of carouselImages) {
-      if (typeof img.arrayBuffer === "function") {
-        const buffer = Buffer.from(await img.arrayBuffer());
-        await writeFile(path.join(uploadDir, img.name), buffer);
-        uploadedCarouselUrls.push(`/uploads/${img.name}`);
-      }
     }
 
     await connectToDatabase();
@@ -159,9 +139,9 @@ export async function POST(request) {
     return NextResponse.json({ success: true, product: newProduct }, { status: 200 });
 
   } catch (error) {
-    console.error("UPLOAD ERROR:", error);
+    console.error("ADD PRODUCT ERROR:", error);
     return NextResponse.json(
-      { success: false, message: "Image upload failed", error: error.message },
+      { success: false, message: "Add product failed", error: error.message },
       { status: 500 }
     );
   }

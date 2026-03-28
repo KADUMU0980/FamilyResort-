@@ -1,13 +1,155 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Home, Loader2, AlertCircle, MapPin,
-  Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp,Phone
+  Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp, Phone, ChevronLeft, ChevronRight
 } from "lucide-react";
 import Image from "next/image";
 
 
+const ResortCard = ({ item }) => {
+  const router = useRouter();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const displayImages = (item.profileImages && item.profileImages.length > 0)
+    ? item.profileImages
+    : (item.image ? [item.image] : ["https://images.unsplash.com/photo-1566073771259-6a8506099945"]);
+
+  const hasMultipleImages = displayImages.length > 1;
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1));
+  };
+
+  const goToImage = (e, idx) => {
+    e.stopPropagation();
+    setCurrentImageIndex(idx);
+  };
+
+  return (
+    <div
+      className="group cursor-pointer h-full"
+      onClick={() => router.push(`/detail/${item._id}`)}
+    >
+      <div className="bg-white rounded-2xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col">
+        <div className="relative h-56 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden group/slider">
+          {displayImages.map((img, idx) => (
+            <div
+              key={idx}
+              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${idx === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+            >
+              <Image
+                src={img}
+                alt={`${item.title} - Image ${idx + 1}`}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              />
+            </div>
+          ))}
+
+          {/* Navigation Arrows */}
+          {hasMultipleImages && (
+            <>
+              <button
+                onClick={prevImage}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-black/30 hover:bg-black/60 text-white rounded-full opacity-0 group-hover/slider:opacity-100 transition-opacity z-20"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-black/30 hover:bg-black/60 text-white rounded-full opacity-0 group-hover/slider:opacity-100 transition-opacity z-20"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              {/* Dots */}
+              <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20">
+                {displayImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={(e) => goToImage(e, idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/60 hover:bg-white'
+                      }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="p-5 flex flex-col flex-1 divide-y divide-gray-100">
+          <div className="pb-4 flex-1">
+            <h2 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 bg-gradient-to-br ">
+              {item.title}
+            </h2>
+
+            <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
+              <MapPin className="w-4 h-4" />
+              <span>Premium Location</span>
+            </div>
+
+            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+              {item.desc}
+            </p>
+
+            {item.amen && item.amen.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {item.amen.slice(0, 3).map((amenity, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium"
+                  >
+                    {amenity}
+                  </span>
+                ))}
+                {item.amen.length > 3 && (
+                  <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full font-medium">
+                    +{item.amen.length - 3} more
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between pt-4 mt-auto">
+            <div className="flex items-center gap-2">
+              <div>
+                <p className="text-2xl font-bold text-gray-900">₹{item.price.toLocaleString()}</p>
+                <p className="text-xs text-gray-500">per night</p>
+              </div>
+            </div>
+
+            <button
+              onClick={(e) => { e.stopPropagation(); router.push(`/detail/${item._id}`); }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors group-hover:shadow-lg inline-block"
+            >
+              Book
+            </button>
+            <a href="tel:+919849660462" className="relative z-10" onClick={(e) => e.stopPropagation()}>
+              <button className="bg-green-400 text-white px-3 py-2 rounded-lg font-small flex items-center gap-2">
+                <Phone className="w-5 h-5 text-blue-600" />
+                <span className="lg:hidden">Call Resort</span>
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProductCollection = () => {
+  const router = useRouter();
   const [collection, setCollection] = useState([]);
   const [filteredCollection, setFilteredCollection] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -354,74 +496,7 @@ const ProductCollection = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredCollection.map((item) => (
-                  <a key={item._id} className="group" href={`/detail/${item._id}`}>
-                    <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
-                      <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
-                        <Image
-                          src={item.image || "https://images.unsplash.com/photo-1566073771259-6a8506099945"}
-                          alt={item.title}
-                          fill
-                          className="object-cover transition-transform duration-300 group-hover:scale-110"
-                        />
-                      </div>
-
-                      <div className="p-5">
-                        <h2 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                          {item.title}
-                        </h2>
-
-                        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-                          <MapPin className="w-4 h-4" />
-                          <span>Premium Location</span>
-                        </div>
-
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                          {item.desc}
-                        </p>
-
-                        {item.amen && item.amen.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {item.amen.slice(0, 3).map((amenity, index) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium"
-                              >
-                                {amenity}
-                              </span>
-                            ))}
-                            {item.amen.length > 3 && (
-                              <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full font-medium">
-                                +{item.amen.length - 3} more
-                              </span>
-                            )}
-                          </div>
-                        )}
-
-                        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                          <div className="flex items-center gap-2">
-                            <div>
-                              <p className="text-2xl font-bold text-gray-900">₹{item.price.toLocaleString()}</p>
-                              <p className="text-xs text-gray-500">per night</p>
-                            </div>
-                          </div>
-
-                          <a
-                            href={`/detail/${item._id}`}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors group-hover:shadow-lg inline-block"
-                          >
-                            Book
-                          </a>
-                          <a href="tel:+919849660462" className="">
-                            <button className="bg-green-400 text-white px-3 py-2 rounded-lg font-small flex items-center gap-2">
-                              <Phone className="w-5 h-5 text-blue-600" />
-                              <span className="lg:hidden">Call Resort</span>
-                            </button>
-                          </a>
-
-                        </div>
-                      </div>
-                    </div>
-                  </a>
+                  <ResortCard key={item._id} item={item} />
                 ))}
               </div>
             )}
