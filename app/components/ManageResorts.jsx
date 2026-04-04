@@ -156,31 +156,31 @@ const ManageResorts = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading resorts...</div>
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream">
+        <div className="text-lg text-luxury-charcoal/70">Loading resorts...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-luxury-cream px-4 py-8">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Manage Resorts</h1>
-            <p className="text-gray-600 mt-1">{resorts.length} total resorts</p>
+            <h1 className="font-display text-3xl font-semibold text-luxury-black">Manage Resorts</h1>
+            <p className="mt-1 text-luxury-charcoal/70">{resorts.length} total resorts</p>
           </div>
           <a
             href="/admin"
-            className="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg shadow-sm border border-gray-200 transition-all"
+            className="rounded-2xl border border-luxury-stone bg-white px-4 py-2 font-medium text-luxury-black shadow-sm transition-all hover:border-luxury-gold/40 hover:bg-luxury-sand/50"
           >
             Back to Admin
           </a>
         </div>
 
         {/* Search & Filter */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+        <div className="mb-6 rounded-2xl border border-luxury-stone/80 bg-white/95 p-6 shadow-glass">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
@@ -225,7 +225,7 @@ const ManageResorts = () => {
 
         {/* Bulk Actions */}
         {showBulkActions && (
-          <div className="bg-blue-600 text-white rounded-xl shadow-lg p-4 mb-6 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between rounded-2xl border border-luxury-gold/40 bg-luxury-black p-4 text-white shadow-luxury">
             <div className="flex items-center gap-3">
               <CheckSquare className="w-5 h-5" />
               <span className="font-medium">{selectedResorts.length} selected</span>
@@ -233,19 +233,19 @@ const ManageResorts = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={handleBulkPriceUpdate}
-                className="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                className="rounded-xl bg-luxury-gold px-4 py-2 font-medium text-luxury-black transition hover:bg-luxury-gold-light"
               >
                 Update Prices
               </button>
               <button
                 onClick={handleBulkDelete}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+                className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700"
               >
                 Delete Selected
               </button>
               <button
                 onClick={() => setSelectedResorts([])}
-                className="p-2 hover:bg-blue-700 rounded-lg transition-colors"
+                className="rounded-lg p-2 transition hover:bg-white/10"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -269,8 +269,8 @@ const ManageResorts = () => {
         </div>
 
         {filteredResorts.length === 0 && (
-          <div className="bg-white rounded-xl shadow-md p-12 text-center">
-            <p className="text-gray-500 text-lg">No resorts found</p>
+          <div className="rounded-2xl border border-luxury-stone/80 bg-white/95 p-12 text-center shadow-glass">
+            <p className="text-lg text-luxury-charcoal/65">No resorts found</p>
           </div>
         )}
       </div>
@@ -293,7 +293,7 @@ const ManageResorts = () => {
 // Resort Card Component
 const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvailability, onEdit }) => {
   return (
-    <div className={`bg-white rounded-xl shadow-md overflow-hidden transition-all duration-200 hover:shadow-xl ${isSelected ? 'ring-4 ring-blue-500' : ''}`}>
+    <div className={`overflow-hidden rounded-2xl border border-luxury-stone/80 bg-white/95 shadow-glass transition-all duration-200 hover:shadow-luxury ${isSelected ? 'ring-2 ring-luxury-gold' : ''}`}>
       {/* Image */}
       <div className="relative h-48">
         <Image

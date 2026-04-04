@@ -1,5 +1,5 @@
 ﻿"use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,266 +12,245 @@ import {
   Home,
   Sparkles,
   Mail,
-  User
+  Building2,
+  Shield,
 } from "lucide-react";
 
-const UserNavigation = ({ userName }) => {
+const UserNavigation = ({ userName = "", isAdmin = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  const isActive = (path) => pathname === path;
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isActive = (path) => {
+    if (path === "/") return pathname === "/";
+    return pathname === path || pathname.startsWith(`${path}/`);
+  };
+
+  const linkClass = (path) =>
+    `rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300 ${
+      isActive(path)
+        ? "bg-luxury-gold/15 text-luxury-gold-dark ring-1 ring-luxury-gold/30"
+        : "text-luxury-charcoal/90 hover:bg-luxury-sand/80"
+    }`;
+
+  const iconLinkClass = (path) =>
+    `rounded-xl p-3 transition-all duration-300 ${
+      isActive(path)
+        ? "bg-luxury-gold/15 text-luxury-gold-dark ring-1 ring-luxury-gold/30"
+        : "text-luxury-charcoal/90 hover:bg-luxury-sand/80"
+    }`;
+
+  const initial = userName?.trim()?.charAt(0)?.toUpperCase() || "?";
+
+  const navShell = `sticky top-0 z-[100] transition-all duration-300 ${
+    scrolled
+      ? "border-b border-luxury-stone/50 bg-luxury-cream/75 shadow-luxury backdrop-blur-xl"
+      : "border-b border-transparent bg-luxury-cream/40 backdrop-blur-md"
+  }`;
 
   return (
     <>
-      {/* Desktop Navigation - Text Only, No Icons */}
-      <nav className="hidden lg:flex items-center justify-between bg-white shadow-lg px-8 py-4 rounded-2xl sticky top-4 z-50 mx-4 my-4 border border-gray-200">
-        {/* Logo/Title */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
-            <Sparkles className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              Holiday Resort
-            </h2>
-            <p className="text-xs text-gray-500">Your Perfect Getaway</p>
-          </div>
-        </Link>
-
-        {/* Center Navigation Links - Text Only */}
-        <div className="flex items-center gap-2">
-          <Link
-            href="/"
-            className={`px-5 py-2.5 rounded-lg transition-all text-[24px] font-medium ${isActive('/user')
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-700 hover:bg-blue-50'
-              }`}
-          >
-            Home
-          </Link>
-
-          <Link
-            href="/user/bookings"
-            className={`px-5 py-2.5 rounded-lg transition-all text-[24px] font-medium ${isActive('/user/bookings')
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-700 hover:bg-blue-50 text-md'
-              }`}
-          >
-            Reservations
-          </Link>
-
-          <Link
-            href="/user/profile"
-            className={` rounded-lg transition-all font-medium text-[24px] ${isActive('/user/profile')
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-700 hover:bg-blue-50 text-md px-5 py-2.5'
-              }`}
-          >
-            Profile
-          </Link>
-
-          <a href="tel:+919849660462">
-            <button className="relative flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all shadow-sm hover:shadow-md">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
-              </svg>
-              Call Resort
-            </button>
-          </a>
-
-        </div>
-
-        {userName ? (
-          <Link
-            href="/api/auth/signout"
-            className="flex items-center gap-2 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md text-sm font-medium"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Logout</span>
-          </Link>
-        ) : (
-          <Link
-            href="/login"
-            className="flex items-center gap-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md text-sm font-medium"
-          >
-            <LogIn className="w-4 h-4" />
-            <span>Login</span>
-          </Link>
-        )}
-      </nav>
-
-      <nav className="hidden md:flex lg:hidden items-center justify-between bg-white shadow-lg px-6 py-4 rounded-2xl sticky top-4 z-50 mx-4 my-4 border border-gray-200">
-        {/* Logo */}
-        <Link href="/user" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-md">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <h2 className="text-xl font-bold text-gray-800">
-            Holiday Resort
-          </h2>
-        </Link>
-
-        <div className="flex items-center gap-2">
-          <Link
-            href="/"
-            className={`p-3 rounded-lg transition-all ${isActive('/user')
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-700 hover:bg-blue-50'
-              }`}
-            title="Home"
-          >
-            <Home className="w-5 h-5" />
-          </Link>
-
-          <Link
-            href="/user/bookings"
-            className={`p-3 rounded-lg transition-all ${isActive('/user/bookings')
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-700 hover:bg-blue-50'
-              }`}
-            title="Reservations"
-          >
-            <Calendar className="w-5 h-5" />
-          </Link>
-
-          <Link
-            href="/user/profile"
-            className={`p-3 rounded-lg transition-all ${isActive('/user/profile')
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-700 hover:bg-blue-50'
-              }`}
-            title="Profile"
-          >
-            <User className="w-5 h-5" />
-          </Link>
-
-          <div className="p-3 bg-gray-50 rounded-lg border border-gray-200" title="Contact: 123 456 789">
-            <Phone className="w-5 h-5 text-blue-600" />
-          </div>
-
-          {userName ? (
-            <Link
-              href="/api/auth/signout"
-              className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5" />
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md"
-              title="Login"
-            >
-              <LogIn className="w-5 h-5" />
-            </Link>
-          )}
-        </div>
-      </nav>
-
-      {/* Mobile Navigation - Icons Only */}
-      <nav className="md:hidden bg-white shadow-lg rounded-2xl mx-4 my-4 border border-gray-200">
-        <div className="flex items-center justify-between px-4 py-3">
-          {/* Logo */}
-          <Link href="/user" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center shadow-md">
-              <Sparkles className="w-5 h-5 text-white" />
+      <header className={navShell}>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+          <Link href="/" className="group flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-luxury-black shadow-luxury ring-1 ring-luxury-gold/30 transition-transform duration-300 group-hover:scale-[1.02]">
+              <Sparkles className="h-6 w-6 text-luxury-gold-light" />
             </div>
-            <h2 className="text-lg font-bold text-gray-800">
-              Holiday Resort
-            </h2>
+            <div className="min-w-0">
+              <h2 className="font-display truncate text-lg font-semibold tracking-tight text-luxury-black sm:text-xl">
+                Aurum Retreats
+              </h2>
+              <p className="hidden text-xs text-luxury-charcoal/60 sm:block">
+                Luxury Resort Booking
+              </p>
+            </div>
           </Link>
 
-          {/* Icon Navigation - Always Visible */}
-          <div className="flex items-center gap-1">
-            <Link
-              href="/user/bookings"
-              className={`p-2.5 rounded-lg transition-all ${isActive('/user/bookings')
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-blue-50'
-                }`}
-              title="Reservations"
-            >
-              <Calendar className="w-5 h-5" />
+          {/* Desktop */}
+          <nav className="hidden items-center gap-1 lg:flex">
+            <Link href="/" className={linkClass("/")}>
+              Home
             </Link>
-
+            <Link href="/resorts" className={linkClass("/resorts")}>
+              Resorts
+            </Link>
+            <Link href="/user/bookings" className={linkClass("/user/bookings")}>
+              Bookings
+            </Link>
+            {isAdmin && (
+              <Link href="/admin" className={linkClass("/admin")}>
+                <span className="inline-flex items-center gap-1.5">
+                  <Shield className="h-4 w-4" />
+                  Admin
+                </span>
+              </Link>
+            )}
+            <a href="tel:+919849660462">
+              <span className="ml-1 inline-flex items-center gap-2 rounded-2xl bg-luxury-black px-4 py-2 text-sm font-medium text-white shadow-luxury transition hover:bg-luxury-charcoal">
+                <Phone className="h-4 w-4 text-luxury-gold-light" />
+                Call
+              </span>
+            </a>
             <Link
               href="/user/profile"
-              className={`p-2.5 rounded-lg transition-all ${isActive('/user/profile')
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-blue-50'
-                }`}
+              className="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-luxury-sand ring-1 ring-luxury-stone/80 transition hover:ring-luxury-gold/40"
               title="Profile"
             >
-              <User className="w-5 h-5" />
+              <span className="text-sm font-semibold text-luxury-black">{initial}</span>
             </Link>
-            <Link
-              href="tel:+919849660462"
-            >
-              <Phone className="w-5 h-5" />
-            </Link>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors ml-1"
-              title="More"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-5 h-5 text-gray-700" />
-              ) : (
-                <Menu className="w-5 h-5 text-gray-700" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu Dropdown - Only Contact & Logout */}
-        {mobileMenuOpen && (
-          <div className="border-t border-gray-200 px-4 py-3 space-y-2 bg-gray-50">
-            {/* Contact Info */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-gray-200">
-              <Phone className="w-5 h-5 text-blue-600" />
-              <a href="tel:+919849660462" className="text-sm font-semibold text-gray-800">
-                Call Resort
-              </a>
-            </div>
-
-            {/* Email Contact */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-gray-200">
-              <Mail className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-xs text-gray-500">Email us</p>
-                <p className="text-sm font-semibold text-gray-800">info@holidayresort.com</p>
-              </div>
-            </div>
-
-            {/* Auth Link */}
             {userName ? (
               <Link
                 href="/api/auth/signout"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md font-medium"
+                className="inline-flex items-center gap-2 rounded-2xl border border-luxury-stone bg-white px-4 py-2 text-sm font-medium text-luxury-charcoal shadow-sm transition hover:border-red-200 hover:bg-red-50 hover:text-red-700"
               >
-                <LogOut className="w-5 h-5" />
-                <span className="text-sm font-semibold text-white">Logout</span>
+                <LogOut className="h-4 w-4" />
+                <span className="hidden xl:inline">Logout</span>
               </Link>
             ) : (
               <Link
                 href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md font-medium"
+                className="inline-flex items-center gap-2 rounded-2xl bg-luxury-gold px-4 py-2 text-sm font-semibold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light"
               >
-                <LogIn className="w-5 h-5" />
-                <span className="text-sm font-semibold text-white">Login</span>
+                <LogIn className="h-4 w-4" />
+                Login
               </Link>
             )}
+          </nav>
+
+          {/* Tablet */}
+          <nav className="hidden items-center gap-1 md:flex lg:hidden">
+            <Link href="/" className={iconLinkClass("/")} title="Home">
+              <Home className="h-5 w-5" />
+            </Link>
+            <Link href="/resorts" className={iconLinkClass("/resorts")} title="Resorts">
+              <Building2 className="h-5 w-5" />
+            </Link>
+            <Link
+              href="/user/bookings"
+              className={iconLinkClass("/user/bookings")}
+              title="Bookings"
+            >
+              <Calendar className="h-5 w-5" />
+            </Link>
+            {isAdmin && (
+              <Link href="/admin" className={iconLinkClass("/admin")} title="Admin">
+                <Shield className="h-5 w-5" />
+              </Link>
+            )}
+            <Link href="/user/profile" title="Profile">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-luxury-sand text-sm font-semibold ring-1 ring-luxury-stone">
+                {initial}
+              </span>
+            </Link>
+            {userName ? (
+              <Link
+                href="/api/auth/signout"
+                className="rounded-xl bg-white p-2.5 text-red-600 shadow-sm ring-1 ring-luxury-stone"
+              >
+                <LogOut className="h-5 w-5" />
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-xl bg-luxury-gold p-2.5 text-luxury-black shadow-luxury-gold"
+              >
+                <LogIn className="h-5 w-5" />
+              </Link>
+            )}
+          </nav>
+
+          {/* Mobile bar */}
+          <div className="flex items-center gap-2 md:hidden">
+            <Link href="/user/profile">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-luxury-sand text-xs font-semibold ring-1 ring-luxury-stone">
+                {initial}
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="rounded-xl p-2.5 text-luxury-charcoal hover:bg-luxury-sand"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+
+        {mobileMenuOpen && (
+          <div className="border-t border-luxury-stone/60 bg-luxury-cream/95 px-4 py-4 backdrop-blur-xl md:hidden">
+            <div className="flex flex-col gap-1">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 ${linkClass("/")}`}
+              >
+                Home
+              </Link>
+              <Link
+                href="/resorts"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 ${linkClass("/resorts")}`}
+              >
+                Resorts
+              </Link>
+              <Link
+                href="/user/bookings"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 ${linkClass("/user/bookings")}`}
+              >
+                Bookings
+              </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`rounded-xl px-4 py-3 ${linkClass("/admin")}`}
+                >
+                  Admin
+                </Link>
+              )}
+              <a
+                href="tel:+919849660462"
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-luxury-charcoal hover:bg-luxury-sand"
+              >
+                <Phone className="h-5 w-5 text-luxury-gold-dark" />
+                Call resort
+              </a>
+              <div className="flex items-center gap-3 rounded-xl px-4 py-3">
+                <Mail className="h-5 w-5 text-luxury-gold-dark" />
+                <span className="text-sm">info@holidayresort.com</span>
+              </div>
+              {userName ? (
+                <Link
+                  href="/api/auth/signout"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-luxury-black py-3 text-sm font-semibold text-white"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-luxury-gold py-3 text-sm font-semibold text-luxury-black"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Login
+                </Link>
+              )}
+            </div>
           </div>
         )}
-      </nav>
+      </header>
     </>
   );
 };

@@ -236,19 +236,19 @@ Total Price: ₹${totalAmount}
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600"></div>
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream p-4">
+        <div className="h-14 w-14 animate-spin rounded-full border-2 border-luxury-gold border-t-transparent" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Oops!</h2>
-          <p className="text-gray-600">{error}</p>
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream p-4">
+        <div className="w-full max-w-md rounded-2xl border border-luxury-stone/80 bg-white/95 p-8 text-center shadow-luxury">
+          <AlertCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
+          <h2 className="mb-2 font-display text-2xl font-semibold text-luxury-black">Oops!</h2>
+          <p className="text-luxury-charcoal/75">{error}</p>
         </div>
       </div>
     );
@@ -256,9 +256,9 @@ Total Price: ₹${totalAmount}
 
   if (!resortRoom) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <p className="text-gray-600">No product found</p>
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream p-4">
+        <div className="w-full max-w-md rounded-2xl border border-luxury-stone/80 bg-white/95 p-8 text-center shadow-luxury">
+          <p className="text-luxury-charcoal/75">No product found</p>
         </div>
       </div>
     );
@@ -276,32 +276,34 @@ Total Price: ₹${totalAmount}
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-b from-luxury-cream via-luxury-sand/40 to-luxury-cream">
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="mb-8">
           <button
+            type="button"
             onClick={() => window.history.back()}
-            className="text-indigo-600 hover:text-indigo-800 font-medium mb-4 flex items-center gap-2"
+            className="mb-4 flex items-center gap-2 font-medium text-luxury-gold-dark transition hover:text-luxury-black"
           >
-            ← Back to Listings
+            ← Back to listings
           </button>
 
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+          <h1 className="mb-2 flex flex-wrap items-center gap-3 font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
             {resortRoom.title}
 
             {getAverageRating() && (
-              <span className="flex items-center gap-1 text-amber-700 px-3 py-1 rounded-full text-sm font-bold">
-                ⭐ {getAverageRating()}
-                <span className="text-gray-600 font-medium">
+              <span className="flex items-center gap-1 rounded-full bg-luxury-black px-3 py-1 text-sm font-semibold text-luxury-gold-light">
+                <Star className="h-4 w-4 fill-luxury-gold text-luxury-gold" />
+                {getAverageRating()}
+                <span className="font-medium text-luxury-sand/90">
                   ({reviews.length} reviews)
                 </span>
               </span>
             )}
           </h1>
 
-          <div className="flex items-center gap-2 text-gray-600">
-            <MapPin className="w-5 h-5" />
+          <div className="flex items-center gap-2 text-luxury-charcoal/75">
+            <MapPin className="h-5 w-5 text-luxury-gold-dark" />
             <span>Premium Resort Room</span>
           </div>
         </div>
@@ -459,18 +461,19 @@ Total Price: ₹${totalAmount}
           </div>
 
           <div className="lg:col-span-1 lg:row-span-2 space-y-6 lg:sticky lg:top-8 order-2">
-            <div className="bg-white rounded-3xl shadow-xl p-6">
-              <div className="text-center mb-6">
-                <div className="text-5xl font-bold text-indigo-600">
+            <div className="rounded-3xl border border-luxury-stone/80 bg-white/95 p-6 shadow-luxury backdrop-blur-sm">
+              <div className="mb-6 text-center">
+                <div className="text-5xl font-bold text-luxury-black">
                   ₹{resortRoom.price}
                 </div>
-                <div className="text-gray-500">per night</div>
+                <div className="text-luxury-charcoal/60">per night</div>
               </div>
 
               {/* Calendar Toggle */}
               <button
+                type="button"
                 onClick={() => setShowCalendar(!showCalendar)}
-                className="w-full px-4 py-3 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center gap-2 font-medium hover:bg-indigo-200 transition-colors mb-4"
+                className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl border border-luxury-stone bg-luxury-sand/80 px-4 py-3 font-medium text-luxury-black transition hover:border-luxury-gold/50 hover:bg-luxury-sand"
               >
                 <Calendar size={18} />
                 {showCalendar ? "Hide Calendar" : "Select Dates"}
@@ -478,12 +481,12 @@ Total Price: ₹${totalAmount}
 
               {/* Calendar */}
               {showCalendar && (
-                <div className="mb-4 border rounded-xl p-4 shadow-sm bg-gray-50 space-y-4">
+                <div className="mb-4 space-y-4 rounded-xl border border-luxury-stone/80 bg-luxury-sand/40 p-4 shadow-sm">
                   <CalendarComponent onDateChange={handleDateChange} />
 
-                  <div className="space-y-3 pt-4 border-t border-gray-200">
+                  <div className="space-y-3 border-t border-luxury-stone/60 pt-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="mb-1 block text-sm font-medium text-luxury-charcoal">
                         Number of People
                       </label>
                       <input
@@ -491,18 +494,18 @@ Total Price: ₹${totalAmount}
                         min="1"
                         value={numberOfPeople}
                         onChange={(e) => setNumberOfPeople(Number(e.target.value))}
-                        className="w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full rounded-lg border border-luxury-stone p-2 focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="mb-1 block text-sm font-medium text-luxury-charcoal">
                         Occasion
                       </label>
                       <select
                         value={occasion}
                         onChange={(e) => setOccasion(e.target.value)}
-                        className="w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full rounded-lg border border-luxury-stone p-2 focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20"
                         required
                       >
                         <option value="" disabled>Select an occasion</option>
@@ -517,13 +520,13 @@ Total Price: ₹${totalAmount}
                     {/* Duration type — only shown for same-day bookings */}
                     {isSameDay && (
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="mb-1 block text-sm font-medium text-luxury-charcoal">
                           Duration Type (Same Day)
                         </label>
                         <select
                           value={durationType}
                           onChange={(e) => handleDurationChange(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full rounded-lg border border-luxury-stone p-2 focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20"
                         >
                           <option value="12hr">12hr (₹{resortRoom.price / 2})</option>
                           <option value="24hr">24hr (₹{resortRoom.price})</option>
@@ -534,9 +537,9 @@ Total Price: ₹${totalAmount}
 
                   {/* Price summary — totalAmount is always the final correct price */}
                   {totalAmount > 0 && (
-                    <div className="mt-3 p-4 bg-green-100 border border-green-400 rounded-lg text-green-700 font-semibold text-center">
+                    <div className="mt-3 rounded-lg border border-luxury-gold/40 bg-luxury-gold/10 p-4 text-center font-semibold text-luxury-black">
                       Total: ₹{totalAmount}
-                      <p className="text-xs text-green-600 mt-1">
+                      <p className="mt-1 text-xs text-luxury-charcoal/70">
                         {isSameDay
                           ? `Same day — ${durationType}`
                           : `${getNights(selectedDates)} night${getNights(selectedDates) > 1 ? "s" : ""}`}
@@ -548,9 +551,10 @@ Total Price: ₹${totalAmount}
 
               {/* Book Button */}
               <button
-                className={`w-full py-4 rounded-2xl font-bold transition-all ${totalAmount > 0 && occasion
-                  ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-xl"
-                  : "bg-red-400 text-gray-800 cursor-not-allowed"
+                type="button"
+                className={`w-full rounded-2xl py-4 font-bold transition-all ${totalAmount > 0 && occasion
+                  ? "bg-luxury-gold text-luxury-black shadow-luxury-gold hover:bg-luxury-gold-light"
+                  : "cursor-not-allowed bg-luxury-stone text-luxury-charcoal/60"
                   }`}
                 onClick={bookingHandler}
                 disabled={totalAmount === 0 || !occasion}
@@ -563,7 +567,7 @@ Total Price: ₹${totalAmount}
               </button>
 
               {totalAmount === 0 && (
-                <p className="text-sm text-gray-500 text-center mt-2">
+                <p className="mt-2 text-center text-sm text-luxury-charcoal/60">
                   Choose your check-in and check-out dates
                 </p>
               )}
@@ -579,25 +583,25 @@ Total Price: ₹${totalAmount}
             </div>
 
             {/* Additional Info */}
-            <div className="bg-white rounded-3xl shadow-xl p-6 hidden lg:block">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="hidden rounded-3xl border border-luxury-stone/80 bg-white/95 p-6 shadow-luxury lg:block">
+              <h3 className="mb-4 text-lg font-bold text-luxury-black">
                 Important Information
               </h3>
-              <ul className="space-y-3 text-sm text-gray-600">
+              <ul className="space-y-3 text-sm text-luxury-charcoal/80">
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-luxury-gold-dark" />
                   <span>Free cancellation up to 24 hours before check-in</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-luxury-gold-dark" />
                   <span>Check-in: 2:00 PM | Check-out: 11:00 AM</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-luxury-gold-dark" />
                   <span>Payment required after admin approval</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-luxury-gold-dark" />
                   <span>Valid ID proof required at check-in</span>
                 </li>
               </ul>
@@ -607,52 +611,52 @@ Total Price: ₹${totalAmount}
           <div className="lg:col-span-2 space-y-6 order-3">
 
             {/* Description */}
-            <div className="bg-white rounded-3xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold mb-4">About This Room</h2>
-              <p className="text-gray-700 text-lg">{resortRoom.desc}</p>
+            <div className="rounded-3xl border border-luxury-stone/80 bg-white/95 p-6 shadow-luxury">
+              <h2 className="mb-4 font-display text-2xl font-bold text-luxury-black">About This Room</h2>
+              <p className="text-lg text-luxury-charcoal/90">{resortRoom.desc}</p>
             </div>
 
             {/* Amenities */}
-            <div className="bg-white rounded-3xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold mb-6">Amenities</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
+            <div className="rounded-3xl border border-luxury-stone/80 bg-white/95 p-6 shadow-luxury">
+              <h2 className="mb-6 font-display text-2xl font-bold text-luxury-black">Amenities</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
                 {resortRoom.amen?.map((amenity, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-4 bg-indigo-50 rounded-xl"
+                    className="flex items-center gap-3 rounded-xl border border-luxury-stone/60 bg-luxury-sand/50 p-4"
                   >
                     {getAmenityIcon(amenity)}
-                    <span className="text-gray-800 font-medium">{amenity}</span>
+                    <span className="font-medium text-luxury-black">{amenity}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Info Notice */}
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
+            <div className="rounded-2xl border border-luxury-gold/30 bg-luxury-sand/60 p-6">
               <div className="flex items-start gap-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <AlertCircle className="w-6 h-6 text-blue-600" />
+                <div className="rounded-full bg-luxury-gold/20 p-3 ring-1 ring-luxury-gold/30">
+                  <AlertCircle className="h-6 w-6 text-luxury-gold-dark" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-blue-900 mb-2">
+                  <h3 className="mb-2 text-lg font-bold text-luxury-black">
                     Booking Process
                   </h3>
-                  <ul className="space-y-2 text-blue-800 text-sm">
+                  <ul className="space-y-2 text-sm text-luxury-charcoal/85">
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="mt-1 text-luxury-gold-dark">•</span>
                       <span>Submit your booking request with your preferred dates</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="mt-1 text-luxury-gold-dark">•</span>
                       <span>Admin will review and approve your request</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="mt-1 text-luxury-gold-dark">•</span>
                       <span>Track your booking status in &quot;My Reservations&quot;</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="mt-1 text-luxury-gold-dark">•</span>
                       <span>Complete payment after approval</span>
                     </li>
                   </ul>
@@ -661,15 +665,15 @@ Total Price: ₹${totalAmount}
             </div>
 
             {/* Reviews Section */}
-            <div className="bg-white rounded-3xl shadow-xl p-6 mt-8">
-              <h2 className="text-2xl font-bold mb-6">Reviews & Ratings</h2>
+            <div className="mt-8 rounded-3xl border border-luxury-stone/80 bg-white/95 p-6 shadow-luxury">
+              <h2 className="mb-6 font-display text-2xl font-bold text-luxury-black">Reviews & Ratings</h2>
 
               {/* Review Form */}
-              <div className="bg-gray-50 border rounded-2xl p-6 mb-8">
-                <h3 className="text-lg font-semibold mb-4">Leave a Review</h3>
+              <div className="mb-8 rounded-2xl border border-luxury-stone/80 bg-luxury-sand/40 p-6">
+                <h3 className="mb-4 text-lg font-semibold text-luxury-black">Leave a Review</h3>
                 <form onSubmit={handleReviewSubmit}>
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                    <label className="mb-2 block text-sm font-medium text-luxury-charcoal">Rating</label>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -684,18 +688,18 @@ Total Price: ₹${totalAmount}
                     </div>
                   </div>
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Review Text</label>
+                    <label className="mb-2 block text-sm font-medium text-luxury-charcoal">Review Text</label>
                     <textarea
                       value={reviewTextInput}
                       onChange={(e) => setReviewTextInput(e.target.value)}
                       placeholder="Write your review about this resort..."
-                      className="w-full p-3 border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 h-24 resize-none"
+                      className="h-24 w-full resize-none rounded-xl border border-luxury-stone p-3 focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20"
                     ></textarea>
                   </div>
                   <button
                     type="submit"
                     disabled={submittingReview}
-                    className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-indigo-400"
+                    className="rounded-lg bg-luxury-black px-6 py-2 font-medium text-white transition hover:bg-luxury-charcoal disabled:bg-luxury-stone"
                   >
                     {submittingReview ? "Posting..." : "Post Review"}
                   </button>
@@ -708,8 +712,8 @@ Total Price: ₹${totalAmount}
                   [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((review, index) => (
                     <div key={index} className="border-b pb-6 last:border-b-0 last:pb-0">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="font-semibold text-gray-900">{review.username}</div>
-                        <div className="text-sm text-gray-500">
+                        <div className="font-semibold text-luxury-black">{review.username}</div>
+                        <div className="text-sm text-luxury-charcoal/60">
                           {new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </div>
                       </div>
@@ -718,11 +722,11 @@ Total Price: ₹${totalAmount}
                           <span key={i}>{i < review.rating ? "⭐" : <Star className="w-4 h-4 text-gray-300 inline" />}</span>
                         ))}
                       </div>
-                      <p className="text-gray-700">{review.review}</p>
+                      <p className="text-luxury-charcoal/90">{review.review}</p>
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-500 text-center py-4">No reviews yet. Be the first to review this resort!</p>
+                  <p className="py-4 text-center text-luxury-charcoal/60">No reviews yet. Be the first to review this resort!</p>
                 )}
               </div>
             </div>

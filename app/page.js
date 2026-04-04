@@ -1,27 +1,19 @@
-﻿
-import { getServerSession } from "next-auth/next";
+﻿import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
-import UserNavigation from "./components/UserNavigation";
-import ProductCollection from "./components/ProductCollection";
+import SiteLayout from "./components/layout/SiteLayout";
+import HomeWithHero from "./components/HomeWithHero";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
-  console.log("Session:", session);
 
-  // Admin redirect BEFORE JSX
   if (session && session.user.role === "admin") {
     redirect("/admin");
   }
 
   return (
-    <>
-      <div className="text-3xl p-4">
-        <UserNavigation userName={session?.user?.name || ""} />
-
-      </div>
-
-      <ProductCollection />
-    </>
+    <SiteLayout>
+      <HomeWithHero />
+    </SiteLayout>
   );
 }

@@ -1,31 +1,58 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Home, Loader2, AlertCircle, MapPin,
-  Search, SlidersHorizontal, X, Filter, ChevronDown, ChevronUp, Phone, ChevronLeft, ChevronRight
+  Home,
+  AlertCircle,
+  MapPin,
+  Search,
+  SlidersHorizontal,
+  X,
+  Filter,
+  ChevronDown,
+  ChevronUp,
+  Phone,
+  ChevronLeft,
+  ChevronRight,
+  Star,
 } from "lucide-react";
 import Image from "next/image";
+import { ResortCardSkeleton } from "./ui/Skeleton";
+import Button from "./ui/Button";
 
+function averageRating(item) {
+  if (!item.reviews?.length) return null;
+  const sum = item.reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+  return sum / item.reviews.length;
+}
 
-const ResortCard = ({ item }) => {
+const ResortCard = ({ item, featured = false }) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const displayImages = (item.profileImages && item.profileImages.length > 0)
-    ? item.profileImages
-    : (item.image ? [item.image] : ["https://images.unsplash.com/photo-1566073771259-6a8506099945"]);
+  const displayImages =
+    item.profileImages && item.profileImages.length > 0
+      ? item.profileImages
+      : item.image
+        ? [item.image]
+        : ["https://images.unsplash.com/photo-1566073771259-6a8506099945"];
 
   const hasMultipleImages = displayImages.length > 1;
+  const avg = averageRating(item);
 
   const nextImage = (e) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1));
+    setCurrentImageIndex((prev) =>
+      prev === displayImages.length - 1 ? 0 : prev + 1
+    );
   };
 
   const prevImage = (e) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1));
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? displayImages.length - 1 : prev - 1
+    );
   };
 
   const goToImage = (e, idx) => {
@@ -33,53 +60,77 @@ const ResortCard = ({ item }) => {
     setCurrentImageIndex(idx);
   };
 
+  const imageHeight = featured ? "h-72 md:h-[420px]" : "h-56";
+
   return (
-    <div
-      className="group cursor-pointer h-full"
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className={`group h-full cursor-pointer ${featured ? "md:col-span-2" : ""}`}
       onClick={() => router.push(`/detail/${item._id}`)}
     >
-      <div className="bg-white rounded-2xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col">
-        <div className="relative h-56 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden group/slider">
+      <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white/95 shadow-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-luxury">
+        <div
+          className={`relative ${imageHeight} overflow-hidden bg-luxury-charcoal group/slider`}
+        >
           {displayImages.map((img, idx) => (
             <div
               key={idx}
-              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${idx === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                }`}
+              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                idx === currentImageIndex ? "z-10 opacity-100" : "z-0 opacity-0"
+              }`}
             >
               <Image
                 src={img}
                 alt={`${item.title} - Image ${idx + 1}`}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                sizes={
+                  featured
+                    ? "(max-width: 768px) 100vw, 66vw"
+                    : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                }
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
             </div>
           ))}
 
-          {/* Navigation Arrows */}
+          {avg != null && (
+            <div className="absolute left-3 top-3 z-20 flex items-center gap-1 rounded-full bg-luxury-black/70 px-2.5 py-1 text-xs font-semibold text-luxury-gold-light backdrop-blur-sm">
+              <Star className="h-3.5 w-3.5 fill-luxury-gold text-luxury-gold" />
+              {avg.toFixed(1)}
+            </div>
+          )}
+
           {hasMultipleImages && (
             <>
               <button
+                type="button"
                 onClick={prevImage}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-black/30 hover:bg-black/60 text-white rounded-full opacity-0 group-hover/slider:opacity-100 transition-opacity z-20"
+                className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-luxury-black/40 text-white opacity-0 transition-opacity hover:bg-luxury-black/70 group-hover/slider:opacity-100"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="h-5 w-5" />
               </button>
               <button
+                type="button"
                 onClick={nextImage}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-black/30 hover:bg-black/60 text-white rounded-full opacity-0 group-hover/slider:opacity-100 transition-opacity z-20"
+                className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-luxury-black/40 text-white opacity-0 transition-opacity hover:bg-luxury-black/70 group-hover/slider:opacity-100"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="h-5 w-5" />
               </button>
 
-              {/* Dots */}
-              <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20">
+              <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-1.5">
                 {displayImages.map((_, idx) => (
                   <button
                     key={idx}
+                    type="button"
                     onClick={(e) => goToImage(e, idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/60 hover:bg-white'
-                      }`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      idx === currentImageIndex
+                        ? "w-4 bg-luxury-gold-light"
+                        : "w-1.5 bg-white/60 hover:bg-white"
+                    }`}
                   />
                 ))}
               </div>
@@ -87,18 +138,18 @@ const ResortCard = ({ item }) => {
           )}
         </div>
 
-        <div className="p-5 flex flex-col flex-1 divide-y divide-gray-100">
-          <div className="pb-4 flex-1">
-            <h2 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 bg-gradient-to-br ">
+        <div className="flex flex-1 flex-col divide-y divide-luxury-stone/60 p-5">
+          <div className="flex-1 pb-4">
+            <h2 className="mb-2 line-clamp-1 bg-gradient-to-br font-display text-xl font-semibold text-luxury-black group-hover:text-luxury-gold-dark">
               {item.title}
             </h2>
 
-            <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-              <MapPin className="w-4 h-4" />
+            <div className="mb-3 flex items-center gap-1 text-sm text-luxury-charcoal/70">
+              <MapPin className="h-4 w-4 text-luxury-gold-dark" />
               <span>Premium Location</span>
             </div>
 
-            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            <p className="mb-4 line-clamp-2 text-sm text-luxury-charcoal/80">
               {item.desc}
             </p>
 
@@ -107,13 +158,13 @@ const ResortCard = ({ item }) => {
                 {item.amen.slice(0, 3).map((amenity, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium"
+                    className="rounded-full bg-luxury-sand px-2 py-1 text-xs font-medium text-luxury-charcoal"
                   >
                     {amenity}
                   </span>
                 ))}
                 {item.amen.length > 3 && (
-                  <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full font-medium">
+                  <span className="rounded-full bg-luxury-stone/80 px-2 py-1 text-xs font-medium text-luxury-charcoal/80">
                     +{item.amen.length - 3} more
                   </span>
                 )}
@@ -121,51 +172,76 @@ const ResortCard = ({ item }) => {
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-4 mt-auto">
-            <div className="flex items-center gap-2">
-              <div>
-                <p className="text-2xl font-bold text-gray-900">₹{item.price.toLocaleString()}</p>
-                <p className="text-xs text-gray-500">per night</p>
-              </div>
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-4">
+            <div>
+              <p className="text-2xl font-bold text-luxury-black">
+                ₹{item.price.toLocaleString()}
+              </p>
+              <p className="text-xs text-luxury-charcoal/60">per night</p>
             </div>
 
-            <button
-              onClick={(e) => { e.stopPropagation(); router.push(`/detail/${item._id}`); }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors group-hover:shadow-lg inline-block"
-            >
-              Book
-            </button>
-            <a href="tel:+919849660462" className="relative z-10" onClick={(e) => e.stopPropagation()}>
-              <button className="bg-green-400 text-white px-3 py-2 rounded-lg font-small flex items-center gap-2">
-                <Phone className="w-5 h-5 text-blue-600" />
-                <span className="lg:hidden">Call Resort</span>
-              </button>
-            </a>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                type="button"
+                variant="primary"
+                className="px-5 py-2 text-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`/detail/${item._id}`);
+                }}
+              >
+                Book Now
+              </Button>
+              <a
+                href="tel:+919849660462"
+                className="relative z-10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span className="inline-flex items-center gap-2 rounded-2xl border border-luxury-stone bg-luxury-sand/90 px-3 py-2 text-sm font-medium text-luxury-black transition hover:bg-luxury-stone">
+                  <Phone className="h-4 w-4 text-luxury-gold-dark" />
+                  <span className="hidden sm:inline">Call</span>
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-const ProductCollection = () => {
-  const router = useRouter();
+const ProductCollection = ({
+  searchQuery: controlledSearch,
+  setSearchQuery: setControlledSearch,
+  variant = "default",
+}) => {
+  const [internalSearch, setInternalSearch] = useState("");
+  const controlled = typeof setControlledSearch === "function";
+  const searchQuery = controlled ? controlledSearch ?? "" : internalSearch;
+  const setSearchQuery = controlled ? setControlledSearch : setInternalSearch;
+
   const [collection, setCollection] = useState([]);
   const [filteredCollection, setFilteredCollection] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Filter states
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQueryLocal, setSearchQueryLocal] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 150000 });
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [sortBy, setSortBy] = useState("featured");
   const [showPriceFilter, setShowPriceFilter] = useState(true);
   const [showAmenitiesFilter, setShowAmenitiesFilter] = useState(true);
+  const [minRating, setMinRating] = useState(0);
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
 
-  // Get unique amenities from all products
-  const allAmenities = [...new Set(collection.flatMap(item => item.amen || []))];
+  useEffect(() => {
+    setSearchQueryLocal(searchQuery);
+  }, [searchQuery]);
+
+  const allAmenities = [
+    ...new Set(collection.flatMap((item) => item.amen || [])),
+  ];
 
   const collectionHandler = async () => {
     setLoading(true);
@@ -195,31 +271,38 @@ const ProductCollection = () => {
     collectionHandler();
   }, []);
 
-  // Apply filters
   useEffect(() => {
     let filtered = [...collection];
 
-    // Search filter
     if (searchQuery) {
-      filtered = filtered.filter(item =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.desc.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    // Price filter
-    filtered = filtered.filter(item =>
-      item.price >= priceRange.min && item.price <= priceRange.max
+    filtered = filtered.filter(
+      (item) => item.price >= priceRange.min && item.price <= priceRange.max
     );
 
-    // Amenities filter
     if (selectedAmenities.length > 0) {
-      filtered = filtered.filter(item =>
-        selectedAmenities.every(amenity => item.amen?.includes(amenity))
+      filtered = filtered.filter((item) =>
+        selectedAmenities.every((amenity) => item.amen?.includes(amenity))
       );
     }
 
-    // Sort
+    if (minRating > 0) {
+      filtered = filtered.filter((item) => {
+        const a = averageRating(item);
+        return a != null && a >= minRating;
+      });
+    }
+
+    if (onlyAvailable) {
+      filtered = filtered.filter((item) => item.available !== false);
+    }
+
     switch (sortBy) {
       case "price-low":
         filtered.sort((a, b) => a.price - b.price);
@@ -235,34 +318,53 @@ const ProductCollection = () => {
     }
 
     setFilteredCollection(filtered);
-  }, [searchQuery, priceRange, selectedAmenities, sortBy, collection]);
+  }, [
+    searchQuery,
+    priceRange,
+    selectedAmenities,
+    sortBy,
+    collection,
+    minRating,
+    onlyAvailable,
+  ]);
 
   const toggleAmenity = (amenity) => {
-    setSelectedAmenities(prev =>
+    setSelectedAmenities((prev) =>
       prev.includes(amenity)
-        ? prev.filter(a => a !== amenity)
+        ? prev.filter((a) => a !== amenity)
         : [...prev, amenity]
     );
   };
 
   const clearFilters = () => {
     setSearchQuery("");
+    setSearchQueryLocal("");
     setPriceRange({ min: 0, max: 150000 });
     setSelectedAmenities([]);
     setSortBy("featured");
+    setMinRating(0);
+    setOnlyAvailable(false);
   };
 
   const activeFiltersCount =
     (searchQuery ? 1 : 0) +
     (priceRange.min > 0 || priceRange.max < 150000 ? 1 : 0) +
-    selectedAmenities.length;
+    selectedAmenities.length +
+    (minRating > 0 ? 1 : 0) +
+    (onlyAvailable ? 1 : 0);
+
+  const featuredStrip = variant === "home" ? collection.slice(0, 4) : [];
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-6">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 font-medium">Loading resorts...</p>
+      <div className="min-h-[50vh] bg-luxury-cream px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 h-10 w-48 animate-pulse rounded-xl bg-luxury-sand" />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <ResortCardSkeleton />
+            <ResortCardSkeleton />
+            <ResortCardSkeleton />
+          </div>
         </div>
       </div>
     );
@@ -270,61 +372,98 @@ const ProductCollection = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Resorts</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={collectionHandler}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
+      <div className="flex min-h-[50vh] items-center justify-center bg-luxury-cream px-4 py-16">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-md rounded-2xl border border-luxury-stone/80 bg-white/95 p-8 text-center shadow-luxury"
+        >
+          <AlertCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
+          <h2 className="mb-2 font-display text-2xl font-semibold text-luxury-black">
+            Error Loading Resorts
+          </h2>
+          <p className="mb-6 text-luxury-charcoal/75">{error}</p>
+          <Button type="button" variant="primary" onClick={collectionHandler}>
             Try Again
-          </button>
-        </div>
+          </Button>
+        </motion.div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header with Search */}
-        <div className="mb-6">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Available Resorts</h1>
+  const featuredItem =
+    filteredCollection.length > 0 ? filteredCollection[0] : null;
+  const gridItems =
+    filteredCollection.length > 1 ? filteredCollection.slice(1) : [];
 
-          {/* Search Bar */}
-          <div className="flex gap-3 flex-wrap">
-            <div className="flex-1 min-w-[250px] relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-luxury-cream via-luxury-sand/40 to-luxury-cream">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        {featuredStrip.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="font-display text-2xl font-semibold text-luxury-black">
+              Featured resorts
+            </h2>
+            <p className="mt-2 text-sm text-luxury-charcoal/70">
+              Handpicked properties from our collection.
+            </p>
+            <div className="mt-6 flex gap-4 overflow-x-auto pb-2 hide-scrollbar sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">
+              {featuredStrip.map((item) => (
+                <div key={item._id} className="min-w-[260px] shrink-0 sm:min-w-0">
+                  <ResortCard item={item} />
+                </div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        <div className="mb-8">
+          <h1 className="mb-2 font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
+            Available Resorts
+          </h1>
+          <p className="text-luxury-charcoal/70">
+            Refine your search — filters apply instantly.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <div className="relative min-w-[250px] flex-1">
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/40" />
               <input
                 type="text"
                 placeholder="Search resorts..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                value={searchQueryLocal}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setSearchQueryLocal(v);
+                  setSearchQuery(v);
+                }}
+                className="w-full rounded-2xl border border-luxury-stone bg-white/95 py-3 pl-10 pr-4 text-sm shadow-sm outline-none ring-0 transition focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20"
               />
             </div>
 
-            {/* Mobile Filter Toggle */}
             <button
+              type="button"
               onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden px-4 py-3 bg-white border border-gray-200 rounded-xl flex items-center gap-2 hover:bg-gray-50"
+              className="inline-flex items-center gap-2 rounded-2xl border border-luxury-stone bg-white/95 px-4 py-3 text-sm font-medium shadow-sm transition hover:border-luxury-gold/40 lg:hidden"
             >
-              <SlidersHorizontal className="w-5 h-5" />
+              <SlidersHorizontal className="h-5 w-5" />
               Filters
               {activeFiltersCount > 0 && (
-                <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className="rounded-full bg-luxury-gold px-2 py-0.5 text-xs font-bold text-luxury-black">
                   {activeFiltersCount}
                 </span>
               )}
             </button>
 
-            {/* Sort Dropdown */}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="rounded-2xl border border-luxury-stone bg-white/95 px-4 py-3 text-sm font-medium shadow-sm outline-none focus:ring-2 focus:ring-luxury-gold/30"
             >
               <option value="featured">Featured</option>
               <option value="price-low">Price: Low to High</option>
@@ -333,15 +472,16 @@ const ProductCollection = () => {
             </select>
           </div>
 
-          {/* Active Filters Count */}
           {activeFiltersCount > 0 && (
-            <div className="mt-3 flex items-center gap-2">
-              <span className="text-sm text-gray-600">
-                {activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''} active
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="text-sm text-luxury-charcoal/70">
+                {activeFiltersCount} filter{activeFiltersCount > 1 ? "s" : ""}{" "}
+                active
               </span>
               <button
+                type="button"
                 onClick={clearFilters}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-sm font-semibold text-luxury-gold-dark hover:underline"
               >
                 Clear all
               </button>
@@ -349,157 +489,272 @@ const ProductCollection = () => {
           )}
         </div>
 
-        <div className="flex gap-6">
-          {/* Sidebar Filters */}
-          <aside className={`
-            ${showFilters ? 'block' : 'hidden'} lg:block
+        <div className="flex gap-8">
+          <aside
+            className={`
+            ${showFilters ? "block" : "hidden"} lg:block
             fixed lg:sticky top-0 left-0 lg:left-auto
-            w-80 lg:w-72 h-screen lg:h-auto
-            bg-white rounded-2xl shadow-lg p-6
+            w-[min(100vw-2rem,20rem)] lg:w-72 h-screen lg:h-auto
+            rounded-2xl border border-luxury-stone/80 bg-white/90 p-6 shadow-luxury backdrop-blur-md
             z-50 lg:z-auto
             overflow-y-auto
-            lg:top-8
-          `}>
-            {/* Mobile Close Button */}
-            <div className="lg:hidden flex justify-between items-center mb-4 pb-4 border-b">
-              <h2 className="text-xl font-bold text-gray-900">Filters</h2>
+            lg:top-24
+          `}
+          >
+            <div className="mb-4 flex items-center justify-between border-b border-luxury-stone/60 pb-4 lg:hidden">
+              <h2 className="font-display text-lg font-semibold text-luxury-black">
+                Filters
+              </h2>
               <button
+                type="button"
                 onClick={() => setShowFilters(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="rounded-xl p-2 hover:bg-luxury-sand"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="hidden lg:flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                <Filter className="w-5 h-5" />
+            <div className="mb-6 hidden items-center justify-between lg:flex">
+              <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-luxury-black">
+                <Filter className="h-5 w-5 text-luxury-gold-dark" />
                 Filters
               </h2>
               {activeFiltersCount > 0 && (
                 <button
+                  type="button"
                   onClick={clearFilters}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm font-semibold text-luxury-gold-dark hover:underline"
                 >
                   Clear
                 </button>
               )}
             </div>
 
-            {/* Price Range Filter */}
-            <div className="mb-6 pb-6 border-b">
+            <div className="mb-6 space-y-4 border-b border-luxury-stone/60 pb-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-luxury-black">
+                  Minimum rating
+                </h3>
+                <span className="text-xs text-luxury-charcoal/60">
+                  {minRating}+ stars
+                </span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="5"
+                step="1"
+                value={minRating}
+                onChange={(e) => setMinRating(Number(e.target.value))}
+                className="w-full accent-luxury-gold"
+              />
+              <div className="flex justify-between text-xs text-luxury-charcoal/50">
+                <span>Any</span>
+                <span>5★</span>
+              </div>
+            </div>
+
+            <div className="mb-6 flex items-center justify-between border-b border-luxury-stone/60 pb-6">
+              <div>
+                <h3 className="text-sm font-semibold text-luxury-black">
+                  Availability
+                </h3>
+                <p className="text-xs text-luxury-charcoal/60">
+                  Show only available resorts
+                </p>
+              </div>
               <button
-                onClick={() => setShowPriceFilter(!showPriceFilter)}
-                className="w-full flex items-center justify-between mb-3"
+                type="button"
+                role="switch"
+                aria-checked={onlyAvailable}
+                onClick={() => setOnlyAvailable((v) => !v)}
+                className={`relative h-8 w-14 rounded-full transition-colors ${
+                  onlyAvailable ? "bg-luxury-gold" : "bg-luxury-stone"
+                }`}
               >
-                <h3 className="font-semibold text-gray-900">Price Range</h3>
-                {showPriceFilter ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <span
+                  className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-transform ${
+                    onlyAvailable ? "left-7" : "left-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="mb-6 border-b border-luxury-stone/60 pb-6">
+              <button
+                type="button"
+                onClick={() => setShowPriceFilter(!showPriceFilter)}
+                className="mb-3 flex w-full items-center justify-between"
+              >
+                <h3 className="font-semibold text-luxury-black">Price range</h3>
+                {showPriceFilter ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
               </button>
 
               {showPriceFilter && (
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm text-gray-600 block mb-1">Min: ₹{priceRange.min.toLocaleString()}</label>
+                    <label className="mb-1 block text-sm text-luxury-charcoal/70">
+                      Min: ₹{priceRange.min.toLocaleString()}
+                    </label>
                     <input
                       type="range"
                       min="0"
                       max="150000"
                       step="5000"
                       value={priceRange.min}
-                      onChange={(e) => setPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
-                      className="w-full"
+                      onChange={(e) =>
+                        setPriceRange((prev) => ({
+                          ...prev,
+                          min: parseInt(e.target.value, 10),
+                        }))
+                      }
+                      className="w-full accent-luxury-gold"
                     />
                   </div>
                   <div>
-                    <label className="text-sm text-gray-600 block mb-1">Max: ₹{priceRange.max.toLocaleString()}</label>
+                    <label className="mb-1 block text-sm text-luxury-charcoal/70">
+                      Max: ₹{priceRange.max.toLocaleString()}
+                    </label>
                     <input
                       type="range"
                       min="0"
                       max="150000"
                       step="5000"
                       value={priceRange.max}
-                      onChange={(e) => setPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
-                      className="w-full"
+                      onChange={(e) =>
+                        setPriceRange((prev) => ({
+                          ...prev,
+                          max: parseInt(e.target.value, 10),
+                        }))
+                      }
+                      className="w-full accent-luxury-gold"
                     />
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Amenities Filter */}
             <div>
               <button
+                type="button"
                 onClick={() => setShowAmenitiesFilter(!showAmenitiesFilter)}
-                className="w-full flex items-center justify-between mb-3"
+                className="mb-3 flex w-full items-center justify-between"
               >
-                <h3 className="font-semibold text-gray-900">Amenities</h3>
-                {showAmenitiesFilter ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <h3 className="font-semibold text-luxury-black">Amenities</h3>
+                {showAmenitiesFilter ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
               </button>
 
               {showAmenitiesFilter && (
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="max-h-64 space-y-2 overflow-y-auto">
                   {allAmenities.map((amenity) => (
                     <label
                       key={amenity}
-                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg"
+                      className="flex cursor-pointer items-center gap-2 rounded-xl p-2 hover:bg-luxury-sand/80"
                     >
                       <input
                         type="checkbox"
                         checked={selectedAmenities.includes(amenity)}
                         onChange={() => toggleAmenity(amenity)}
-                        className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                        className="h-4 w-4 rounded border-luxury-stone text-luxury-gold focus:ring-luxury-gold"
                       />
-                      <span className="text-sm text-gray-700">{amenity}</span>
+                      <span className="text-sm text-luxury-charcoal">{amenity}</span>
                     </label>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Apply Filters Button (Mobile) */}
-            <button
+            <Button
+              type="button"
+              variant="primary"
+              className="mt-6 w-full lg:hidden"
               onClick={() => setShowFilters(false)}
-              className="lg:hidden w-full mt-6 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700"
             >
-              Show {filteredCollection.length} Results
-            </button>
+              Show {filteredCollection.length} results
+            </Button>
           </aside>
 
-          {/* Backdrop for mobile */}
           {showFilters && (
             <div
+              role="presentation"
               onClick={() => setShowFilters(false)}
-              className="lg:hidden fixed inset-0 bg-black/50 z-40"
+              className="fixed inset-0 z-40 bg-luxury-black/40 backdrop-blur-sm lg:hidden"
             />
           )}
 
-          {/* Products Grid */}
-          <div className="flex-1">
-            <p className="text-gray-600 mb-6">
-              Showing {filteredCollection.length} of {collection.length} resorts
+          <div className="min-w-0 flex-1">
+            <p className="mb-6 text-sm text-luxury-charcoal/75">
+              Showing {filteredCollection.length} of {collection.length}{" "}
+              resorts
             </p>
 
-            {filteredCollection.length === 0 ? (
-              <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-                <Home className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">No Resorts Found</h3>
-                <p className="text-gray-600 mb-6">
-                  Try adjusting your filters to see more results
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+            <AnimatePresence mode="wait">
+              {filteredCollection.length === 0 ? (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="rounded-2xl border border-luxury-stone/80 bg-white/95 p-12 text-center shadow-luxury"
                 >
-                  Clear Filters
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredCollection.map((item) => (
-                  <ResortCard key={item._id} item={item} />
-                ))}
-              </div>
-            )}
+                  <Home className="mx-auto mb-4 h-16 w-16 text-luxury-stone" />
+                  <h3 className="font-display text-2xl font-semibold text-luxury-black">
+                    No resorts found
+                  </h3>
+                  <p className="mt-2 text-luxury-charcoal/70">
+                    Try adjusting filters or search to see more results.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    className="mt-6"
+                    onClick={clearFilters}
+                  >
+                    Clear filters
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="grid"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-10"
+                >
+                  {featuredItem && (
+                    <div>
+                      <h3 className="mb-4 font-display text-lg font-semibold text-luxury-black">
+                        Top match
+                      </h3>
+                      <div className="grid gap-6 lg:grid-cols-2">
+                        <ResortCard item={featuredItem} featured />
+                      </div>
+                    </div>
+                  )}
+
+                  {gridItems.length > 0 && (
+                    <div>
+                      <h3 className="mb-4 font-display text-lg font-semibold text-luxury-black">
+                        More stays
+                      </h3>
+                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
+                        {gridItems.map((item) => (
+                          <ResortCard key={item._id} item={item} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>

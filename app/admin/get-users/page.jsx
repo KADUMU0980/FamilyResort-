@@ -5,6 +5,7 @@ import userModel from "@/app/utils/models/userModel";
 import "@/app/utils/models/bookingModel"; // âœ… Import to register schema
 import "@/app/utils/models/productModel"; // âœ… Import to register Product schema
 import UsersClient from "./UsersClient";
+import AdminNav from "../../components/AdminNav";
 
 const GetUsers = async () => {
   // 1ï¸âƒ£ Get session
@@ -51,7 +52,14 @@ const GetUsers = async () => {
   // 5ï¸âƒ£ Serialize data for client (convert MongoDB objects to plain objects)
   const serializedUsers = JSON.parse(JSON.stringify(users));
 
-  return <UsersClient users={serializedUsers} />;
+  return (
+    <div className="flex min-h-screen bg-luxury-cream">
+      <AdminNav userName={session.user.name} />
+      <main className="min-h-screen flex-1 overflow-auto">
+        <UsersClient users={serializedUsers} />
+      </main>
+    </div>
+  );
 };
 
 export default GetUsers;

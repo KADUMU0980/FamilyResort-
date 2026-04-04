@@ -279,32 +279,34 @@ const MyReservations = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-luxury-cream via-luxury-sand/40 to-luxury-cream px-4 py-8">
       <button
+        type="button"
         onClick={() => window.history.back()}
-        className="text-indigo-600 hover:text-indigo-800 font-medium mb-4 flex items-center gap-2"
+        className="mb-4 flex items-center gap-2 font-medium text-luxury-gold-dark transition hover:text-luxury-black"
       >
         <ArrowBigLeft className="w-5 h-5" />
         Back to Home
       </button>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-6 rounded-2xl border border-luxury-stone/80 bg-white/95 p-8 shadow-luxury">
+          <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Calendar className="w-8 h-8 text-white" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-luxury-black shadow-luxury">
+                <Calendar className="h-8 w-8 text-luxury-gold-light" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900">My Bookings</h1>
-                <p className="text-gray-600 mt-1">Track and manage all your resort reservations</p>
+                <h1 className="font-display text-4xl font-semibold text-luxury-black">My Bookings</h1>
+                <p className="mt-1 text-luxury-charcoal/70">Track and manage all your resort reservations</p>
               </div>
             </div>
 
             <button
+              type="button"
               onClick={refreshBookings}
               disabled={refreshing}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="flex items-center gap-2 rounded-2xl border border-luxury-stone bg-white px-4 py-2 text-luxury-black transition hover:border-luxury-gold/50 disabled:opacity-50"
             >
               <Loader2 className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
               Refresh
@@ -333,21 +335,22 @@ const MyReservations = () => {
         </div>
 
         {/* Filter Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
-          <div className="flex gap-2 flex-wrap">
+        <div className="mb-6 rounded-2xl border border-luxury-stone/80 bg-white/95 p-4 shadow-glass">
+          <div className="flex flex-wrap gap-2">
             {[
-              { key: "all", label: "All Bookings", count: statusCounts.all, color: "blue" },
-              { key: "pending", label: "Pending", count: statusCounts.pending, color: "yellow" },
-              { key: "approved", label: "Confirmed", count: statusCounts.approved, color: "green" },
-              { key: "rejected", label: "Rejected", count: statusCounts.rejected, color: "red" },
+              { key: "all", label: "All Bookings", count: statusCounts.all },
+              { key: "pending", label: "Pending", count: statusCounts.pending },
+              { key: "approved", label: "Confirmed", count: statusCounts.approved },
+              { key: "rejected", label: "Rejected", count: statusCounts.rejected },
             ].map((tab) => (
               <button
                 key={tab.key}
+                type="button"
                 onClick={() => setFilter(tab.key)}
-                className={`px-5 py-3 rounded-xl font-semibold transition-all ${
+                className={`rounded-xl px-5 py-3 font-semibold transition-all ${
                   filter === tab.key
-                    ? `bg-${tab.color}-600 text-white shadow-lg scale-105`
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "scale-[1.02] bg-luxury-black text-luxury-gold-light shadow-luxury"
+                    : "bg-luxury-sand/80 text-luxury-charcoal hover:bg-luxury-stone/80"
                 }`}
               >
                 {tab.label} ({tab.count})
@@ -358,17 +361,17 @@ const MyReservations = () => {
 
         {/* Bookings List */}
         {filteredBookings.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-            <Home className="w-20 h-20 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">No Bookings Found</h3>
-            <p className="text-gray-600 mb-6">
+          <div className="rounded-2xl border border-luxury-stone/80 bg-white/95 p-12 text-center shadow-luxury">
+            <Home className="mx-auto mb-4 h-20 w-20 text-luxury-stone" />
+            <h3 className="mb-2 font-display text-2xl font-semibold text-luxury-black">No Bookings Found</h3>
+            <p className="mb-6 text-luxury-charcoal/75">
               {filter !== "all" 
                 ? `You don't have any ${filter} bookings yet.` 
                 : "Start exploring our amazing resorts and make your first booking!"}
             </p>
             <Link 
               href="/"
-              className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="inline-block rounded-2xl bg-luxury-gold px-6 py-3 font-semibold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light"
             >
               Browse Resorts
             </Link>
