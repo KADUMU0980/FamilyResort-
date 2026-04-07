@@ -3,8 +3,11 @@ import GoogleProvider from "next-auth/providers/google";
 import connectToDatabase from "@/app/utils/configue/db";
 import userModel from "@/app/utils/models/userModel";
 import bcrypt from "bcrypt";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "@/app/utils/configue/clientPromise";
 
 export const authOptions = {
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     // ⭐ GOOGLE PROVIDER
     GoogleProvider({
@@ -55,17 +58,12 @@ export const authOptions = {
 
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      // Google login → user object exists only on first login
-      if (account?.provider === "google") {
-        token.id = profile?.sub;
-        token.email = profile?.email;
-        token.name = profile?.name;
-        token.role = "user";
-      }
-
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        // DB user is available on sign-in for both OAuth & Credentials due to the DB adapter
+        token.id = user.id || user._id?.toString();
+        token.email = user.email;
+        token.name = user.name;
+        token.role = user.role || "user";
       }
 
       return token;
