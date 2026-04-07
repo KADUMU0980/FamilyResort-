@@ -140,7 +140,7 @@ const DynamicProduct = () => {
       const result = await bookingAction(bookingData);
 
       if (result.success) {
-        const phoneNumber = "9849660462";
+        const supportPhone = "9849660462";
         const nights = getNights(selectedDates);
 
         const message = `
@@ -155,7 +155,7 @@ ${isSameDay ? `Duration: ${durationType}` : `Nights: ${nights}`}
 Total Price: ₹${totalAmount}
         `;
 
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        const whatsappURL = `https://wa.me/${supportPhone}?text=${encodeURIComponent(message)}`;
         window.open(whatsappURL, "_blank");
 
         // Send Email Request concurrently via Server Action

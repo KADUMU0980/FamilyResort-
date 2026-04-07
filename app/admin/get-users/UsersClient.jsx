@@ -106,7 +106,7 @@ const UserRow = ({ user, onApprovalChange }) => {
           <div className="text-left">
             <h3 className="font-semibold text-luxury-black">{user.name}</h3>
             <p className="text-sm text-luxury-charcoal/65">{user.email}</p>
-            <p className="text-sm text-luxury-charcoal/65">{user.phoneNumber}</p>
+            <p className="text-sm text-luxury-charcoal/65">{user.phone || "—"}</p>
           </div>
         </div>
         

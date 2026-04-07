@@ -7,16 +7,24 @@ import bcrypt from "bcrypt";
 export async function loginAction(credentials) {
   try {
     const { email, password } = credentials;
+    const emailNormalized = email.trim().toLowerCase();
 
-    console.log("Login attempt for:", email);
+    console.log("Login attempt for:", emailNormalized);
 
     await connectToDatabase();
 
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email: emailNormalized });
     console.log("User found:", !!user);
 
     if (!user) {
       return { success: false, message: "User not found" };
+    }
+
+    if (user.provider === "google" || !user.password) {
+      return {
+        success: false,
+        message: "This account uses Google sign-in. Please sign in with Google.",
+      };
     }
 
     const valid = await bcrypt.compare(password, user.password);

@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import connectToDatabase from "@/app/utils/configue/db";
-import userModel from "@/app/utils/models/userModel";
 import bookingModel from "@/app/utils/models/bookingModel";
 
 // GET - Fetch current user's bookings
@@ -13,7 +12,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     // Check if user is authenticated
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { message: "Unauthorized - Please log in" },
         { status: 401 }
@@ -22,18 +21,18 @@ export async function GET() {
 
     await connectToDatabase();
 
-    // Find user by email
-    const user = await userModel
-      .findOne({ email: session.user.email })
+    const user = await bookingModel
+      .find({ user: session.user.id })
       .populate({
-        path: "bookings",
-        model: "booking",
-        populate: {
-          path: "resortRoom",
-          model: "Product"
-        },
-        options: { sort: { createdAt: -1 } } // Sort by newest first
+        path: "resortRoom",
+        model: "Product"
       })
+      .populate({
+        path: "user",
+        model: "User",
+        select: "name email phone"
+      })
+      .sort({ createdAt: -1 })
       .lean();
 
     if (!user) {
@@ -43,8 +42,7 @@ export async function GET() {
       );
     }
 
-    // Serialize bookings
-    const bookings = JSON.parse(JSON.stringify(user.bookings || []));
+    const bookings = JSON.parse(JSON.stringify(user || []));
 
     return NextResponse.json({ 
       success: true,
@@ -70,7 +68,7 @@ export async function POST(request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { message: "Unauthorized - Please log in" },
         { status: 401 }
@@ -78,15 +76,6 @@ export async function POST(request) {
     }
 
     await connectToDatabase();
-
-    const user = await userModel.findOne({ email: session.user.email });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
-    }
 
     const body = await request.json();
     const { resortRoom, startDate, endDate, price, productName, offer, image } = body;
@@ -118,7 +107,7 @@ export async function POST(request) {
 
     // Create booking
     const booking = new bookingModel({
-      user: user._id,
+      user: session.user.id,
       resortRoom,
       productName,
       startDate: new Date(startDate),
@@ -130,12 +119,6 @@ export async function POST(request) {
     });
 
     await booking.save();
-
-    // Add booking to user's bookings array
-    await userModel.findByIdAndUpdate(
-      user._id,
-      { $push: { bookings: booking._id } }
-    );
 
     return NextResponse.json({
       success: true,
@@ -161,7 +144,7 @@ export async function PATCH(request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { message: "Unauthorized - Please log in" },
         { status: 401 }
@@ -179,19 +162,10 @@ export async function PATCH(request) {
       );
     }
 
-    const user = await userModel.findOne({ email: session.user.email });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
-    }
-
     // Find booking and verify it belongs to user
     const booking = await bookingModel.findOne({
       _id: bookingId,
-      user: user._id
+      user: session.user.id
     });
 
     if (!booking) {
@@ -225,7 +199,6 @@ export async function PATCH(request) {
       { message: "Invalid action" },
       { status: 400 }
     );
-
   } catch (error) {
     console.error("Error updating booking:", error);
     return NextResponse.json(

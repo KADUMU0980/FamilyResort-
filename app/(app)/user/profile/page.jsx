@@ -13,13 +13,16 @@ export default async function ProfilePage() {
   }
 
   await connectToDatabase();
-  const user = await userModel.findOne({ email: session.user.email });
+  const user = await userModel.findById(session.user.id);
+  const displayPhone = (user?.phone || "").trim() || "—";
 
   return (
     <UserProfile
       userName={session.user.name}
       userEmail={session.user.email}
-      userPhone={user?.phoneNumber || ""}
+      userPhone={displayPhone}
+      userImage={user?.image || session.user?.image || ""}
+      canChangePassword={user?.provider !== "google"}
     />
   );
 }
