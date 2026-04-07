@@ -77,13 +77,13 @@ export async function GET() {
 // POST - Update booking status (Approve/Reject)
 export async function POST(req) {
   try {
-    console.log("ðŸ”µ POST /api/users called");
+    console.log("POST /api/users called");
     
     const session = await getServerSession(authOptions);
     console.log("Session:", session);
 
     if (!session?.user?.email) {
-      console.log("âŒ No session found");
+      console.log("No session found");
       return new Response(
         JSON.stringify({ message: "Unauthorized - Please log in" }),
         { 
@@ -94,7 +94,7 @@ export async function POST(req) {
     }
 
     if (session.user.role !== "admin") {
-      console.log("âŒ User is not admin");
+      console.log("User is not admin");
       return new Response(
         JSON.stringify({ message: "Access Denied - Admin only" }),
         { 
@@ -105,12 +105,12 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    console.log("ðŸ“¦ Request body:", body);
+    console.log("Request body:", body);
     
     const { bookingId, status } = body;
 
     if (!bookingId) {
-      console.log("âŒ No bookingId provided");
+      console.log("No bookingId provided");
       return new Response(
         JSON.stringify({ message: "Booking ID is required" }),
         { 
@@ -121,7 +121,7 @@ export async function POST(req) {
     }
 
     if (!["approved", "rejected", "pending"].includes(status)) {
-      console.log("âŒ Invalid status:", status);
+      console.log("Invalid status:", status);
       return new Response(
         JSON.stringify({ message: "Invalid status. Must be 'approved', 'rejected', or 'pending'" }),
         { 
@@ -142,7 +142,7 @@ export async function POST(req) {
     ).populate("resortRoom");
 
     if (!booking) {
-      console.log("âŒ Booking not found");
+      console.log("Booking not found");
       return new Response(
         JSON.stringify({ message: "Booking not found" }),
         { 
@@ -152,7 +152,7 @@ export async function POST(req) {
       );
     }
 
-    console.log("âœ… Booking updated successfully");
+    console.log("Booking updated successfully");
     return new Response(
       JSON.stringify({
         success: true,
@@ -166,7 +166,7 @@ export async function POST(req) {
     );
 
   } catch (error) {
-    console.error("âŒ Error updating booking status:", error);
+    console.error("Error updating booking status:", error);
     return new Response(
       JSON.stringify({ 
         success: false,

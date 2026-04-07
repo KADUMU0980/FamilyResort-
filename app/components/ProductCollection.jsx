@@ -146,7 +146,7 @@ const ResortCard = ({ item, featured = false }) => {
 
             <div className="mb-3 flex items-center gap-1 text-sm text-luxury-charcoal/70">
               <MapPin className="h-4 w-4 text-luxury-gold-dark" />
-              <span>Premium Location</span>
+              <span>{item.address}</span>
             </div>
 
             <p className="mb-4 line-clamp-2 text-sm text-luxury-charcoal/80">

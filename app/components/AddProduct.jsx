@@ -10,6 +10,9 @@ const AddProduct = () => {
   const [offer, setOffer] = useState("");
   const [amen, setAmen] = useState("");
   const [desc, setDesc] = useState("");
+  const [address, setAddress] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   const [profileImages, setProfileImages] = useState([]); // { file, preview }
   const [carouselImages, setCarouselImages] = useState([]); // { file, preview }
@@ -172,6 +175,9 @@ const AddProduct = () => {
       formData.append("offer", offer);
       formData.append("amen", amen);
       formData.append("desc", desc);
+      if (address) formData.append("address", address);
+      if (latitude) formData.append("latitude", latitude);
+      if (longitude) formData.append("longitude", longitude);
 
       uploadedProfileUrls.forEach((url) => {
         formData.append("profileImages", url);
@@ -203,6 +209,9 @@ const AddProduct = () => {
         setOffer("");
         setAmen("");
         setDesc("");
+        setAddress("");
+        setLatitude("");
+        setLongitude("");
         setCarouselImages([]);
         setProfileImages([]);
       } else {
@@ -279,6 +288,48 @@ const AddProduct = () => {
               rows={3}
               placeholder="Enter product description"
             />
+          </div>
+
+          {/* Location Section */}
+          <div className="rounded-2xl border border-luxury-stone/80 bg-luxury-sand/30 p-5 space-y-4">
+            <h3 className="text-base font-semibold text-luxury-black flex items-center gap-2">
+              <span>📍</span> Location Details
+            </h3>
+            <div>
+              <label className="luxury-label">Address</label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="luxury-input"
+                placeholder="Enter resort address"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="luxury-label">Latitude</label>
+                <input
+                  type="number"
+                  step="any"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                  className="luxury-input"
+                  placeholder="e.g. 15.4909"
+                />
+              </div>
+              <div>
+                <label className="luxury-label">Longitude</label>
+                <input
+                  type="number"
+                  step="any"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                  className="luxury-input"
+                  placeholder="e.g. 73.8278"
+                />
+              </div>
+            </div>
+            <p className="text-xs text-luxury-charcoal/55">Latitude &amp; longitude are used to show the resort location on Google Maps.</p>
           </div>
 
           <div>

@@ -6,6 +6,9 @@ const productSchema = new mongoose.Schema({
   offer: { type: String },
 
   desc: { type: String },
+  address: { type: String, default: "" },
+  latitude: { type: Number, default: null },
+  longitude: { type: Number, default: null },
   image: { type: String },
   images: { type: [String], default: [] },
   profileImages: { type: [String], default: [] },
@@ -38,8 +41,8 @@ const productSchema = new mongoose.Schema({
     }
   ]
 });
-delete mongoose.models.Product;
-const productModel = mongoose.model("Product", productSchema);
+  
+const productModel = mongoose.models.Product || mongoose.model("Product", productSchema);
 export default productModel;
 
 

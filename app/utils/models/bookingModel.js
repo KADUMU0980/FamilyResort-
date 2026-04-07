@@ -105,8 +105,7 @@ const bookingSchema = new mongoose.Schema(
 bookingSchema.index({ resortRoom: 1, startDate: 1, endDate: 1, status: 1 });
 bookingSchema.index({ user: 1, paymentStatus: 1 });
 
-delete mongoose.models.booking;
-const bookingModel = mongoose.model("booking", bookingSchema);
+const bookingModel = mongoose.models.booking || mongoose.model("booking", bookingSchema);
 
 export default bookingModel;
 
