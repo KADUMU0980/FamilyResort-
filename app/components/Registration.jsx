@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { registerAction } from "@/app/serverActions/registerAction";
 
-
 const validationSchema = Yup.object({
   name: Yup.string()
     .min(2, "Name must be at least 2 characters")
@@ -28,13 +27,11 @@ const validationSchema = Yup.object({
     .required("Please confirm your password"),
 });
 
-
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
-
 
   const formik = useFormik({
     initialValues: {
@@ -49,7 +46,6 @@ export default function RegisterPage() {
       setLoading(true);
       setServerError("");
 
-
       try {
         const formData = new FormData();
         formData.append("name", values.name);
@@ -57,14 +53,11 @@ export default function RegisterPage() {
         formData.append("phoneNumber", values.phoneNumber);
         formData.append("password", values.password);
 
-
         const data = await registerAction(formData);
-
 
         if (data.success) {
           setSuccess(true);
           formik.resetForm();
-
 
           setTimeout(() => {
             router.push("/login");
@@ -80,18 +73,19 @@ export default function RegisterPage() {
     },
   });
 
+  const inputClass = (touched, err) =>
+    `luxury-input ${touched && err ? "luxury-input-error" : ""}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="flex w-full justify-center px-4 py-12 md:py-16">
       <div className="w-full max-w-md">
-        {/* Back to Home Link */}
         <div className="mb-6 text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="inline-flex items-center gap-2 text-luxury-charcoal/75 transition hover:text-luxury-black"
           >
             <svg
-              className="w-5 h-5"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -107,26 +101,17 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-
-        {/* Registration Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
-          {/* Header */}
+        <div className="luxury-surface space-y-6 p-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="mb-2 font-display text-3xl font-semibold text-luxury-black">
               Create Account
             </h1>
-            <p className="text-gray-600">Join us and get started today</p>
+            <p className="text-luxury-charcoal/70">Join us and get started today</p>
           </div>
 
-
-          {/* Form */}
           <form onSubmit={formik.handleSubmit} className="space-y-5">
-            {/* Name Input */}
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="name" className="luxury-label">
                 Full Name
               </label>
               <input
@@ -137,25 +122,15 @@ export default function RegisterPage() {
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.name && formik.errors.name
-                  ? "border-red-500"
-                  : "border-gray-300"
-                  }`}
+                className={inputClass(formik.touched.name, formik.errors.name)}
               />
               {formik.touched.name && formik.errors.name && (
-                <p className="text-xs text-red-600 mt-1">
-                  {formik.errors.name}
-                </p>
+                <p className="mt-1 text-xs text-red-600">{formik.errors.name}</p>
               )}
             </div>
 
-
-            {/* Email Input */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="email" className="luxury-label">
                 Email Address
               </label>
               <input
@@ -166,25 +141,15 @@ export default function RegisterPage() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.email && formik.errors.email
-                  ? "border-red-500"
-                  : "border-gray-300"
-                  }`}
+                className={inputClass(formik.touched.email, formik.errors.email)}
               />
               {formik.touched.email && formik.errors.email && (
-                <p className="text-xs text-red-600 mt-1">
-                  {formik.errors.email}
-                </p>
+                <p className="mt-1 text-xs text-red-600">{formik.errors.email}</p>
               )}
             </div>
 
-
-            {/* Phone Number Input */}
             <div>
-              <label
-                htmlFor="phoneNumber"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="phoneNumber" className="luxury-label">
                 Phone Number
               </label>
               <input
@@ -195,25 +160,20 @@ export default function RegisterPage() {
                 value={formik.values.phoneNumber}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.phoneNumber && formik.errors.phoneNumber
-                  ? "border-red-500"
-                  : "border-gray-300"
-                  }`}
+                className={inputClass(
+                  formik.touched.phoneNumber,
+                  formik.errors.phoneNumber
+                )}
               />
               {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="mt-1 text-xs text-red-600">
                   {formik.errors.phoneNumber}
                 </p>
               )}
             </div>
 
-
-            {/* Password Input */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="password" className="luxury-label">
                 Password
               </label>
               <input
@@ -224,29 +184,24 @@ export default function RegisterPage() {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.password && formik.errors.password
-                  ? "border-red-500"
-                  : "border-gray-300"
-                  }`}
+                className={inputClass(
+                  formik.touched.password,
+                  formik.errors.password
+                )}
               />
               {formik.touched.password && formik.errors.password ? (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="mt-1 text-xs text-red-600">
                   {formik.errors.password}
                 </p>
               ) : (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="mt-1 text-xs text-luxury-charcoal/60">
                   Must contain 8+ characters, uppercase, lowercase, and number
                 </p>
               )}
             </div>
 
-
-            {/* Confirm Password Input */}
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="confirmPassword" className="luxury-label">
                 Confirm Password
               </label>
               <input
@@ -257,26 +212,23 @@ export default function RegisterPage() {
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none ${formik.touched.confirmPassword &&
+                className={inputClass(
+                  formik.touched.confirmPassword,
                   formik.errors.confirmPassword
-                  ? "border-red-500"
-                  : "border-gray-300"
-                  }`}
+                )}
               />
               {formik.touched.confirmPassword &&
                 formik.errors.confirmPassword && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="mt-1 text-xs text-red-600">
                     {formik.errors.confirmPassword}
                   </p>
                 )}
             </div>
 
-
-            {/* Server Error Message */}
             {serverError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-start gap-2">
+              <div className="flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
                 <svg
-                  className="w-5 h-5 flex-shrink-0 mt-0.5"
+                  className="mt-0.5 h-5 w-5 flex-shrink-0"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -290,15 +242,9 @@ export default function RegisterPage() {
               </div>
             )}
 
-
-            {/* Success Message */}
             {success && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
+              <div className="flex items-center gap-2 rounded-2xl border border-luxury-gold/40 bg-luxury-gold/10 px-4 py-3 text-sm text-luxury-black">
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -309,17 +255,15 @@ export default function RegisterPage() {
               </div>
             )}
 
-
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading || success || !formik.isValid || !formik.dirty}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-luxury-gold py-3 px-4 font-semibold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <svg
-                    className="animate-spin h-5 w-5 text-white"
+                    className="h-5 w-5 animate-spin text-luxury-black"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -331,59 +275,53 @@ export default function RegisterPage() {
                       r="10"
                       stroke="currentColor"
                       strokeWidth="4"
-                    ></circle>
+                    />
                     <path
                       className="opacity-75"
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
+                    />
                   </svg>
                   Creating Account...
                 </>
               ) : (
-              "Create Account"
+                "Create Account"
               )}
-          </button>
-        </form>
+            </button>
+          </form>
 
-
-        {/* Divider */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-luxury-stone" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white/95 px-2 text-luxury-charcoal/60">
+                Already have an account?
+              </span>
+            </div>
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">
-              Already have an account?
-            </span>
+
+          <div className="text-center">
+            <Link
+              href="/login"
+              className="font-medium text-luxury-gold-dark transition hover:text-luxury-black hover:underline"
+            >
+              Sign in instead
+            </Link>
           </div>
         </div>
 
-
-        {/* Login Link */}
-        <div className="text-center">
-          <Link
-            href="/login"
-            className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-          >
-            Sign in instead
+        <p className="mt-6 text-center text-sm text-luxury-charcoal/65">
+          By creating an account, you agree to our{" "}
+          <Link href="/terms" className="text-luxury-gold-dark hover:underline">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/terms" className="text-luxury-gold-dark hover:underline">
+            Privacy Policy
           </Link>
-        </div>
+        </p>
       </div>
-
-
-      {/* Footer */}
-      <p className="text-center text-sm text-gray-600 mt-6">
-        By creating an account, you agree to our{" "}
-        <Link href="/terms" className="text-blue-600 hover:underline">
-          Terms of Service
-        </Link>{" "}
-        and{" "}
-        <Link href="/privacy" className="text-blue-600 hover:underline">
-          Privacy Policy
-        </Link>
-      </p>
     </div>
-    </div >
   );
 }

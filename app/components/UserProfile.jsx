@@ -42,7 +42,6 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
     setLoading(true);
     setMessage({ type: '', text: '' });
 
-    // Validate passwords if changing password
     if (formData.newPassword) {
       if (formData.newPassword !== formData.confirmPassword) {
         setMessage({ type: 'error', text: 'New passwords do not match' });
@@ -109,174 +108,169 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 px-4">
-            <button
-              onClick={() => window.history.back()}
-              className="text-indigo-600 hover:text-indigo-800 font-medium mb-4 flex items-center gap-2"
-            >
-              <ArrowBigLeft className="w-5 h-5" />
-              Back to Home
-            </button>
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <User className="w-8 h-8 text-white" />
+    <div className="luxury-page py-8 px-4">
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className="mb-4 flex items-center gap-2 font-medium text-luxury-gold-dark transition hover:text-luxury-black"
+      >
+        <ArrowBigLeft className="h-5 w-5" />
+        Back to Home
+      </button>
+      <div className="luxury-container max-w-4xl">
+        <div className="luxury-surface mb-6 p-8">
+          <div className="mb-4 flex items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-luxury-black shadow-luxury">
+              <User className="h-8 w-8 text-luxury-gold-light" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">My Profile</h1>
-              <p className="text-gray-600 mt-1">Manage your account settings and preferences</p>
+              <h1 className="font-display text-4xl font-semibold text-luxury-black">My Profile</h1>
+              <p className="mt-1 text-luxury-charcoal/70">Manage your account settings and preferences</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="flex flex-col items-center mb-8 pb-8 border-b border-gray-200">
+        <div className="luxury-surface p-8">
+          <div className="mb-8 flex flex-col items-center border-b border-luxury-stone/60 pb-8">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-5xl font-bold shadow-lg">
+              <div className="flex h-32 w-32 items-center justify-center rounded-full bg-luxury-black text-5xl font-bold text-luxury-gold-light shadow-luxury">
                 {userName?.charAt(0).toUpperCase() || "U"}
               </div>
-              <button className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors shadow-lg">
-                <Camera className="w-5 h-5" />
+              <button
+                type="button"
+                className="absolute bottom-0 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-luxury-gold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light"
+              >
+                <Camera className="h-5 w-5" />
               </button>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mt-4">Name: {userName}</h2>
-            <p className="text-gray-600">Email: {userEmail}</p>
-            <p className="text-gray-600">Phone: {userPhone}</p>
+            <h2 className="mt-4 font-display text-2xl font-semibold text-luxury-black">Name: {userName}</h2>
+            <p className="text-luxury-charcoal/75">Email: {userEmail}</p>
+            <p className="text-luxury-charcoal/75">Phone: {userPhone}</p>
           </div>
 
           {message.text && (
-            <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${message.type === 'success'
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-red-50 border border-red-200'
-              }`}>
+            <div className={`mb-6 flex items-center gap-3 rounded-2xl border p-4 ${
+              message.type === 'success'
+                ? 'border-luxury-gold/40 bg-luxury-gold/10'
+                : 'border-red-200 bg-red-50'
+            }`}>
               {message.type === 'success' ? (
-                <CheckCircle className="w-5 h-5 text-green-600" />
+                <CheckCircle className="h-5 w-5 text-luxury-gold-dark" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-600" />
+                <AlertCircle className="h-5 w-5 text-red-600" />
               )}
-              <p className={`font-medium ${message.type === 'success' ? 'text-green-800' : 'text-red-800'
-                }`}>
+              <p className={`font-medium ${
+                message.type === 'success' ? 'text-luxury-black' : 'text-red-800'
+              }`}>
                 {message.text}
               </p>
             </div>
           )}
 
           <div className="mb-8">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-blue-600" />
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-luxury-black">
+              <User className="h-5 w-5 text-luxury-gold-dark" />
               Account Information
             </h3>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
-              </label>
+              <label className="luxury-label">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/40" />
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   disabled={!isEditing}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${isEditing ? 'bg-white' : 'bg-gray-100'
-                    }`}
+                  className={`luxury-input pl-10 ${isEditing ? '' : 'cursor-not-allowed bg-luxury-sand/60'}`}
                   placeholder="Enter your name"
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
+              <label className="luxury-label">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/40" />
                 <input
                   type="email"
                   value={formData.email}
                   disabled
-                  className="w-full pl-10 pr-4 py-3 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                  className="luxury-input cursor-not-allowed bg-luxury-sand/60 pl-10 text-luxury-charcoal/70"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+              <p className="mt-1 text-xs text-luxury-charcoal/55">Email cannot be changed</p>
             </div>
           </div>
 
           {isEditing && (
-            <div className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Lock className="w-5 h-5 text-blue-600" />
+            <div className="mb-8 rounded-2xl border border-luxury-stone/80 bg-luxury-sand/40 p-6">
+              <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-luxury-black">
+                <Lock className="h-5 w-5 text-luxury-gold-dark" />
                 Change Password
               </h3>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Password
-                </label>
+                <label className="luxury-label">Current Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/40" />
                   <input
                     type={showPassword ? "text" : "password"}
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="luxury-input pl-10 pr-12"
                     placeholder="Enter current password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-luxury-charcoal/50 hover:text-luxury-black"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  New Password
-                </label>
+                <label className="luxury-label">New Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/40" />
                   <input
                     type={showNewPassword ? "text" : "password"}
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="luxury-input pl-10 pr-12"
                     placeholder="Enter new password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-luxury-charcoal/50 hover:text-luxury-black"
                   >
-                    {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm New Password
-                </label>
+                <label className="luxury-label">Confirm New Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/40" />
                   <input
                     type={showNewPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="luxury-input pl-10"
                     placeholder="Confirm new password"
                   />
                 </div>
               </div>
 
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-luxury-charcoal/65">
                 Leave password fields empty if you don&apos;t want to change your password
               </p>
             </div>
@@ -285,33 +279,36 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
           <div className="flex gap-4">
             {!isEditing ? (
               <button
+                type="button"
                 onClick={() => setIsEditing(true)}
-                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+                className="flex-1 rounded-2xl bg-luxury-gold py-3 px-6 font-medium text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light"
               >
                 Edit Profile
               </button>
             ) : (
               <>
                 <button
+                  type="button"
                   onClick={cancelEdit}
                   disabled={loading}
-                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors disabled:opacity-50"
+                  className="flex-1 rounded-2xl border border-luxury-stone bg-luxury-sand/80 py-3 px-6 font-medium text-luxury-black transition hover:bg-luxury-stone/80 disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
+                  type="button"
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors shadow-md hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-luxury-black py-3 px-6 font-medium text-white shadow-luxury transition hover:bg-luxury-charcoal disabled:opacity-50"
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="h-5 w-5 animate-spin" />
                       Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="w-5 h-5" />
+                      <Save className="h-5 w-5" />
                       Save Changes
                     </>
                   )}

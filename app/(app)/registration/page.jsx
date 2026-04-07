@@ -1,11 +1,10 @@
-﻿import Registration from "@/app/components/Registration"
-const UserRegister = () =>{
-    return (
-        <div>
-            <Registration />
-        </div>
+﻿import SiteLayout from "@/app/components/layout/SiteLayout";
+import Registration from "@/app/components/Registration";
 
-    )
+export default function UserRegister() {
+  return (
+    <SiteLayout>
+      <Registration />
+    </SiteLayout>
+  );
 }
-
-export default UserRegister

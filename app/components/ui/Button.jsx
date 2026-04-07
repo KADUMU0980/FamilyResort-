@@ -5,10 +5,13 @@ import { forwardRef } from "react";
 const variants = {
   primary:
     "bg-luxury-gold text-luxury-black hover:bg-luxury-gold-light shadow-luxury-gold",
+  secondary:
+    "border border-luxury-stone bg-white text-luxury-black hover:border-luxury-gold/50 hover:bg-luxury-sand/80 shadow-sm",
   outline:
     "border border-luxury-stone bg-white/80 text-luxury-black hover:bg-white hover:border-luxury-gold/50",
   ghost: "text-luxury-black hover:bg-luxury-sand/80",
   dark: "bg-luxury-black text-white hover:bg-luxury-charcoal",
+  danger: "border border-red-200 bg-red-50 text-red-800 hover:bg-red-100",
 };
 
 const Button = forwardRef(function Button(

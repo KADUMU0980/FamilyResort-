@@ -29,18 +29,18 @@ const CalendarComponent = ({ onDateChange }) => {
   return (
     <div className="w-full">
       <div className="flex items-center gap-2 mb-3">
-        <div className="flex-1 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5 text-center">
-          <p className="text-xs text-indigo-400 font-medium uppercase tracking-wide mb-0.5">Check-in</p>
-          <p className="text-sm font-bold text-indigo-700">
+        <div className="flex-1 rounded-xl border border-luxury-gold/30 bg-luxury-sand/80 px-4 py-2.5 text-center">
+          <p className="mb-0.5 text-xs font-medium uppercase tracking-wide text-luxury-gold-dark">Check-in</p>
+          <p className="text-sm font-bold text-luxury-black">
             {formatDate(range[0].startDate)}
           </p>
         </div>
-        <div className="text-gray-400 font-bold text-lg">
+        <div className="text-lg font-bold text-luxury-charcoal/40">
           <ArrowBigRight className="w-5 h-5" />
         </div>
-        <div className="flex-1 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5 text-center">
-          <p className="text-xs text-indigo-400 font-medium uppercase tracking-wide mb-0.5">Check-out</p>
-          <p className="text-sm font-bold text-indigo-700">
+        <div className="flex-1 rounded-xl border border-luxury-gold/30 bg-luxury-sand/80 px-4 py-2.5 text-center">
+          <p className="mb-0.5 text-xs font-medium uppercase tracking-wide text-luxury-gold-dark">Check-out</p>
+          <p className="text-sm font-bold text-luxury-black">
             {formatDate(range[0].endDate)}
           </p>
         </div>
@@ -84,8 +84,8 @@ const CalendarComponent = ({ onDateChange }) => {
 
         .rdrMonthAndYearPickers select {
           font-weight: 600;
-          color: #4338ca;
-          background-color: #eef2ff;
+          color: #8a7019;
+          background-color: #f0ebe3;
           border-radius: 8px;
           padding: 4px 8px;
           cursor: pointer;
@@ -104,41 +104,42 @@ const CalendarComponent = ({ onDateChange }) => {
 
         .rdrStartEdge,
         .rdrEndEdge {
-          background-color: #4f46e5 !important;
+          background-color: #c9a227 !important;
         }
 
         .rdrInRange {
-          background-color: #c7d2fe !important;
+          background-color: #e8d48b !important;
+          opacity: 0.45;
         }
 
         .rdrDayToday .rdrDayNumber span::after {
-          background-color: #4f46e5 !important;
+          background-color: #8a7019 !important;
         }
 
         .rdrMonthAndYearWrapper {
-          background-color: #f5f3ff;
+          background-color: #faf8f5;
           padding: 8px 0;
         }
 
         .rdrNextPrevButton {
-          background-color: #e0e7ff !important;
+          background-color: #f0ebe3 !important;
           border-radius: 8px !important;
         }
 
         .rdrNextPrevButton:hover {
-          background-color: #c7d2fe !important;
+          background-color: #e8d48b !important;
         }
 
         .rdrPprevButton i {
-          border-color: transparent #4f46e5 transparent transparent !important;
+          border-color: transparent #8a7019 transparent transparent !important;
         }
 
         .rdrNextButton i {
-          border-color: transparent transparent transparent #4f46e5 !important;
+          border-color: transparent transparent transparent #8a7019 !important;
         }
 
         .rdrWeekDay {
-          color: #6366f1 !important;
+          color: #8a7019 !important;
           font-weight: 600 !important;
           font-size: 0.75rem !important;
         }

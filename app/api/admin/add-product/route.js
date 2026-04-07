@@ -108,6 +108,9 @@ export async function POST(request) {
     const offer = data.get("offer");
     const amen = data.get("amen");
     const desc = data.get("desc");
+    const address = data.get("address") || "";
+    const latitude = data.get("latitude") ? parseFloat(data.get("latitude")) : null;
+    const longitude = data.get("longitude") ? parseFloat(data.get("longitude")) : null;
     
     // Since we're appending Cloudinary URL strings from frontend using FormData:
     const uploadedProfileUrls = data.getAll("profileImages");
@@ -130,6 +133,9 @@ export async function POST(request) {
       offer,
       amen,
       desc,
+      address,
+      latitude,
+      longitude,
       image: uploadedProfileUrls[0] || "", // maintain backward compatibility
       images: uploadedCarouselUrls, // maintain backward compatibility
       profileImages: uploadedProfileUrls,

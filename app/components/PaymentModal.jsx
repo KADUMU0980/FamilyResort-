@@ -1,8 +1,10 @@
-﻿import { useState } from "react";
-import { 
-  CreditCard, 
-  Smartphone, 
-  Building, 
+﻿"use client";
+
+import { useState } from "react";
+import {
+  CreditCard,
+  Smartphone,
+  Building,
   Wallet,
   X,
   Lock,
@@ -26,7 +28,6 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
     setProcessing(true);
 
     try {
-      // Step 1: Initiate payment
       const initiateResponse = await fetch("/api/bookings/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,10 +45,8 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
         return;
       }
 
-      // Step 2: Simulate payment processing (In real app, call Razorpay/Stripe)
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Step 3: Verify payment
       const verifyResponse = await fetch("/api/bookings/payment", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -80,74 +79,78 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
 
   if (paymentSuccess) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="w-12 h-12 text-green-600" />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black/50 p-4 backdrop-blur-sm">
+        <div className="w-full max-w-md rounded-2xl border border-luxury-stone/80 bg-white/95 p-8 text-center shadow-luxury">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-luxury-gold/15 ring-1 ring-luxury-gold/40">
+            <CheckCircle className="h-12 w-12 text-luxury-gold-dark" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
-          <p className="text-gray-600 mb-4">Your booking is now confirmed and paid.</p>
-          <p className="text-sm text-gray-500">You will be redirected shortly...</p>
+          <h2 className="mb-2 font-display text-2xl font-semibold text-luxury-black">
+            Payment Successful!
+          </h2>
+          <p className="mb-4 text-luxury-charcoal/75">Your booking is now confirmed and paid.</p>
+          <p className="text-sm text-luxury-charcoal/55">You will be redirected shortly...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Complete Payment</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black/50 p-4 backdrop-blur-sm">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-luxury-stone/80 bg-white/95 shadow-luxury">
+        <div className="sticky top-0 flex items-center justify-between border-b border-luxury-stone/80 bg-white/95 px-6 py-4 backdrop-blur-sm">
+          <h2 className="font-display text-2xl font-semibold text-luxury-black">Complete Payment</h2>
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="rounded-xl p-2 transition hover:bg-luxury-sand"
           >
-            <X className="w-6 h-6 text-gray-600" />
+            <X className="h-6 w-6 text-luxury-charcoal" />
           </button>
         </div>
 
         <div className="p-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Lock className="w-5 h-5 text-blue-600" />
-              <p className="text-sm font-semibold text-blue-900">Secure Payment</p>
+          <div className="mb-6 rounded-2xl border border-luxury-gold/30 bg-luxury-sand/50 p-4">
+            <div className="mb-3 flex items-center gap-2">
+              <Lock className="h-5 w-5 text-luxury-gold-dark" />
+              <p className="text-sm font-semibold text-luxury-black">Secure Payment</p>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-gray-700">{booking.productName}</span>
+                <span className="text-luxury-charcoal/90">{booking.productName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 text-sm">
+                <span className="text-sm text-luxury-charcoal/70">
                   {new Date(booking.startDate).toLocaleDateString()} - {new Date(booking.endDate).toLocaleDateString()}
                 </span>
               </div>
-              <div className="flex justify-between pt-2 border-t border-blue-200">
-                <span className="font-bold text-gray-900">Total Amount</span>
-                <span className="font-bold text-gray-900 text-xl">₹{booking.price}</span>
+              <div className="flex justify-between border-t border-luxury-stone/80 pt-2">
+                <span className="font-bold text-luxury-black">Total Amount</span>
+                <span className="text-xl font-bold text-luxury-black">₹{booking.price}</span>
               </div>
             </div>
           </div>
 
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Select Payment Method</h3>
+            <h3 className="mb-4 text-lg font-semibold text-luxury-black">Select Payment Method</h3>
             <div className="grid grid-cols-2 gap-3">
               {paymentMethods.map((method) => {
                 const Icon = method.icon;
                 return (
                   <button
                     key={method.id}
+                    type="button"
                     onClick={() => setSelectedMethod(method.id)}
-                    className={`p-4 rounded-xl border-2 transition-all ${
+                    className={`rounded-2xl border-2 p-4 transition-all ${
                       selectedMethod === method.id
-                        ? "border-blue-600 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-luxury-gold bg-luxury-gold/10 shadow-luxury-gold"
+                        : "border-luxury-stone hover:border-luxury-gold/40"
                     }`}
                   >
-                    <Icon className={`w-8 h-8 mx-auto mb-2 ${
-                      selectedMethod === method.id ? "text-blue-600" : "text-gray-600"
+                    <Icon className={`mx-auto mb-2 h-8 w-8 ${
+                      selectedMethod === method.id ? "text-luxury-gold-dark" : "text-luxury-charcoal/70"
                     }`} />
                     <p className={`font-medium ${
-                      selectedMethod === method.id ? "text-blue-900" : "text-gray-700"
+                      selectedMethod === method.id ? "text-luxury-black" : "text-luxury-charcoal/85"
                     }`}>
                       {method.name}
                     </p>
@@ -158,13 +161,14 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
           </div>
 
           <button
+            type="button"
             onClick={handlePayment}
             disabled={processing}
-            className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-luxury-gold py-4 text-lg font-bold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light disabled:cursor-not-allowed disabled:opacity-50"
           >
             {processing ? (
               <>
-                <Loader2 className="w-6 h-6 animate-spin" />
+                <Loader2 className="h-6 w-6 animate-spin" />
                 Processing Payment...
               </>
             ) : (
@@ -172,7 +176,7 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
             )}
           </button>
 
-          <p className="text-xs text-center text-gray-500 mt-4">
+          <p className="mt-4 text-center text-xs text-luxury-charcoal/55">
             Your payment information is encrypted and secure
           </p>
         </div>

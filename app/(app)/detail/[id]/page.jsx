@@ -16,6 +16,7 @@ import {
   Star,
   ChevronLeft,
   ChevronRight,
+  Navigation,
 } from "lucide-react";
 import { bookingAction } from "../../../serverActions/bookingAction";
 import { addReviewAction } from "../../../serverActions/reviewAction";
@@ -302,19 +303,69 @@ Total Price: ₹${totalAmount}
             )}
           </h1>
 
-          <div className="flex items-center gap-2 text-luxury-charcoal/75">
-            <MapPin className="h-5 w-5 text-luxury-gold-dark" />
-            <span>Premium Resort Room</span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {/* Address — clickable to open Google Maps location */}
+            {resortRoom.address || (resortRoom.latitude && resortRoom.longitude) ? (
+              <a
+                href={
+                  resortRoom.latitude && resortRoom.longitude
+                    ? `https://www.google.com/maps?q=${resortRoom.latitude},${resortRoom.longitude}`
+                    : `https://www.google.com/maps/search/${encodeURIComponent(resortRoom.address)}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-luxury-charcoal/75 hover:text-luxury-gold-dark transition-colors group"
+              >
+                <MapPin className="h-5 w-5 text-luxury-gold-dark shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="underline-offset-2 group-hover:underline">
+                  {resortRoom.address || `${resortRoom.latitude}, ${resortRoom.longitude}`}
+                </span>
+              </a>
+            ) : (
+              <div className="flex items-center gap-2 text-luxury-charcoal/75">
+                <MapPin className="h-5 w-5 text-luxury-gold-dark" />
+                <span>Location not specified</span>
+              </div>
+            )}
+
+            {/* Directions Button */}
+            {resortRoom.latitude && resortRoom.longitude && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (!navigator.geolocation) {
+                    alert("Geolocation is not supported by your browser.");
+                    return;
+                  }
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      const { latitude: userLat, longitude: userLng } = position.coords;
+                      const url = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${resortRoom.latitude},${resortRoom.longitude}`;
+                      window.open(url, "_blank");
+                    },
+                    () => {
+                      // Fallback: open directions without origin
+                      const url = `https://www.google.com/maps/dir/?api=1&destination=${resortRoom.latitude},${resortRoom.longitude}`;
+                      window.open(url, "_blank");
+                    }
+                  );
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full bg-luxury-gold/15 border border-luxury-gold/40 px-4 py-1.5 text-sm font-medium text-luxury-gold-dark hover:bg-luxury-gold/25 transition-colors"
+              >
+                <Navigation className="h-4 w-4" />
+                Directions
+              </button>
+            )}
           </div>
         </div>
 
         {/* Fullscreen Gallery Modal */}
         {showGallery && (
-          <div className="fixed inset-0 z-50 bg-black/95 flex flex-col">
-            <div className="absolute top-6 right-6 z-50 flex gap-4">
+          <div className="fixed inset-0 z-[200] bg-black/95 flex flex-col">
+            <div className="absolute top-16 right-6 z-[200] flex gap-4">
               <button 
                 onClick={() => setShowGallery(false)}
-                className="bg-white hover:bg-white/40 text-red-600 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+                className="bg-white hover:bg-white/10 text-luxury-gold-dark rounded-full w-10 h-10 flex items-center justify-center transition-colors"
                 aria-label="Close Gallery"
               >
                 ✕
@@ -328,6 +379,7 @@ Total Price: ₹${totalAmount}
                     src={displayImages[galleryIndex]}
                     alt={`Gallery image ${galleryIndex + 1}`}
                     fill
+                    sizes="100vw"
                     className="object-contain"
                   />
                 </div>
@@ -360,7 +412,7 @@ Total Price: ₹${totalAmount}
                   onClick={() => setGalleryIndex(idx)}
                   className={`relative h-full aspect-video flex-shrink-0 rounded overflow-hidden opacity-50 transition-all ${galleryIndex === idx ? 'opacity-100 ring-2 ring-white scale-105' : 'hover:opacity-75'}`}
                 >
-                  <Image src={img} alt={`Thumb ${idx}`} fill className="object-cover" />
+                  <Image src={img} alt={`Thumb ${idx}`} fill sizes="128px" className="object-cover" />
                 </button>
               ))}
             </div>
@@ -374,23 +426,23 @@ Total Price: ₹${totalAmount}
             <div className="hidden lg:grid grid-cols-4 grid-rows-2 gap-2 h-[450px] rounded-3xl overflow-hidden shadow-xl">
               {displayImages.length === 1 && (
                 <div className="col-span-4 row-span-2 relative cursor-pointer" onClick={() => openGallery(0)}>
-                  <Image src={displayImages[0]} alt="main" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                  <Image src={displayImages[0]} alt="main" fill sizes="100vw" className="object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
               )}
               {displayImages.length === 2 && (
                 <>
                   <div className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
-                    <Image src={displayImages[0]} alt="main" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                    <Image src={displayImages[0]} alt="main" fill sizes="50vw" className="object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
-                    <Image src={displayImages[1]} alt="main" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                    <Image src={displayImages[1]} alt="main" fill sizes="50vw" className="object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                 </>
               )}
               {displayImages.length >= 3 && (
                 <>
                   <div className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden group" onClick={() => openGallery(0)}>
-                    <Image src={displayImages[0]} alt="main" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={displayImages[0]} alt="main" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   
                   {displayImages.slice(1, 5).map((img, idx) => {
@@ -408,7 +460,7 @@ Total Price: ₹${totalAmount}
                     
                     return (
                       <div key={idx} className={classes} onClick={() => openGallery(idx + 1)}>
-                        <Image src={img} alt={`grid-${idx}`} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <Image src={img} alt={`grid-${idx}`} fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                         
                         {/* Overlay for additional images */}
                         {isLastShown && displayImages.length > 5 && (
@@ -441,7 +493,7 @@ Total Price: ₹${totalAmount}
               >
                 {displayImages.map((img, idx) => (
                   <div key={idx} className="min-w-full h-full snap-start relative cursor-pointer" onClick={() => openGallery(idx)}>
-                    <Image src={img} alt={`mobile-${idx}`} fill className="object-cover" />
+                    <Image src={img} alt={`mobile-${idx}`} fill sizes="100vw" className="object-cover" />
                   </div>
                 ))}
                 {displayImages.length === 0 && (
