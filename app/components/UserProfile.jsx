@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import {
   User,
   Mail,
@@ -15,16 +16,26 @@ import {
   ArrowBigLeft
 } from "lucide-react";
 
-const UserProfile = ({ userEmail, userName, userPhone }) => {
+const UserProfile = ({
+  userEmail,
+  userName,
+  userPhone,
+  userImage = "",
+  canChangePassword = true,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
+  const initialPhone =
+    userPhone && userPhone !== "—" ? userPhone : "";
+
   const [formData, setFormData] = useState({
     name: userName || '',
     email: userEmail || '',
+    phone: initialPhone,
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
@@ -66,6 +77,7 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
+          phone: formData.phone,
           currentPassword: formData.currentPassword || undefined,
           newPassword: formData.newPassword || undefined
         })
@@ -100,6 +112,7 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
     setFormData({
       name: userName || '',
       email: userEmail || '',
+      phone: initialPhone,
       currentPassword: '',
       newPassword: '',
       confirmPassword: ''
@@ -133,8 +146,18 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
         <div className="luxury-surface p-8">
           <div className="mb-8 flex flex-col items-center border-b border-luxury-stone/60 pb-8">
             <div className="relative">
-              <div className="flex h-32 w-32 items-center justify-center rounded-full bg-luxury-black text-5xl font-bold text-luxury-gold-light shadow-luxury">
-                {userName?.charAt(0).toUpperCase() || "U"}
+              <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-luxury-black text-5xl font-bold text-luxury-gold-light shadow-luxury">
+                {userImage ? (
+                  <Image
+                    src={userImage}
+                    alt=""
+                    width={128}
+                    height={128}
+                    className="object-cover"
+                  />
+                ) : (
+                  userName?.charAt(0).toUpperCase() || "U"
+                )}
               </div>
               <button
                 type="button"
@@ -145,7 +168,7 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
             </div>
             <h2 className="mt-4 font-display text-2xl font-semibold text-luxury-black">Name: {userName}</h2>
             <p className="text-luxury-charcoal/75">Email: {userEmail}</p>
-            <p className="text-luxury-charcoal/75">Phone: {userPhone}</p>
+            <p className="text-luxury-charcoal/75">Phone: {userPhone || "—"}</p>
           </div>
 
           {message.text && (
@@ -202,9 +225,22 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
               </div>
               <p className="mt-1 text-xs text-luxury-charcoal/55">Email cannot be changed</p>
             </div>
+
+            <div className="mb-4">
+              <label className="luxury-label">Phone number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                disabled={!isEditing}
+                className={`luxury-input ${isEditing ? '' : 'cursor-not-allowed bg-luxury-sand/60'}`}
+                placeholder="Add your phone number"
+              />
+            </div>
           </div>
 
-          {isEditing && (
+          {isEditing && canChangePassword && (
             <div className="mb-8 rounded-2xl border border-luxury-stone/80 bg-luxury-sand/40 p-6">
               <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-luxury-black">
                 <Lock className="h-5 w-5 text-luxury-gold-dark" />
@@ -274,6 +310,12 @@ const UserProfile = ({ userEmail, userName, userPhone }) => {
                 Leave password fields empty if you don&apos;t want to change your password
               </p>
             </div>
+          )}
+
+          {isEditing && !canChangePassword && (
+            <p className="mb-8 text-sm text-luxury-charcoal/70">
+              You signed in with Google. Password change is not available for this account.
+            </p>
           )}
 
           <div className="flex gap-4">

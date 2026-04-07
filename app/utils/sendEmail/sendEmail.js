@@ -10,13 +10,14 @@ export const sendBookingEmail = async (booking) => {
   const session = await getServerSession(authOptions);
 
   let userEmail = booking.userEmail || "Unknown";
-  let phoneNumber = booking.phoneNumber || "Unknown";
+  let phone = booking.phone || "Unknown";
 
-  if (session?.user?.email) {
-    userEmail = session.user.email;
-    const user = await userModel.findOne({ email: userEmail });
-    if (user && user.phoneNumber) {
-      phoneNumber = user.phoneNumber;
+  if (session?.user?.id) {
+    const user = await userModel.findById(session.user.id);
+    if (user) {
+      userEmail = user.email || userEmail;
+      const p = (user.phone || "").trim();
+      if (p) phone = p;
     }
   }
 
@@ -37,7 +38,7 @@ New Booking Request
 
 Resort: ${booking.productName}
 User Email: ${userEmail}
-Phone: ${phoneNumber}
+Phone: ${phone}
 People: ${booking.numberOfPeople}
 Occasion: ${booking.occasion}
 Start Date: ${booking.startDate}

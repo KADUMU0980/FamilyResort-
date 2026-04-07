@@ -2,7 +2,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import connectToDatabase from "@/app/utils/configue/db";
-import userModel from "@/app/utils/models/userModel";
 import bookingModel from "@/app/utils/models/bookingModel"; // Import booking model
 
 export async function GET() {
@@ -12,56 +11,31 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     console.log("Session found:", !!session);
 
-    if (!session?.user?.email) {
-      console.log("No session or email");
+    if (!session?.user?.id) {
+      console.log("No session or user id");
       return Response.json(
         { message: "Unauthorized - Please login", success: false },
         { status: 401 }
       );
     }
 
-    console.log("User email:", session.user.email);
+    console.log("User id:", session.user.id);
 
     await connectToDatabase();
     console.log("Database connected");
 
-    // Find user first
-    const user = await userModel
-      .findOne({ email: session.user.email })
-      .select('_id email bookings')
-      .lean();
-
-    console.log("User found:", !!user);
-
-    if (!user) {
-      console.log("User not found in database");
-      return Response.json(
-        { message: "User not found", success: false },
-        { status: 404 }
-      );
-    }
-
-    console.log("User bookings array length:", user.bookings?.length || 0);
-
-    // If user has no bookings, return empty array
-    if (!user.bookings || user.bookings.length === 0) {
-      console.log("User has no bookings");
-      return Response.json({ 
-        success: true,
-        bookings: [],
-        count: 0
-      });
-    }
-
-    // Fetch bookings directly from booking collection
+    // Fetch bookings directly by owner id
     const bookings = await bookingModel
-      .find({ 
-        _id: { $in: user.bookings }
-      })
+      .find({ user: session.user.id })
       .populate({
         path: "resortRoom",
         model: "Product",
         select: "title image offer price" // Only select needed fields
+      })
+      .populate({
+        path: "user",
+        model: "User",
+        select: "name email phone"
       })
       .sort({ createdAt: -1 })
       .lean();

@@ -9,7 +9,7 @@ export async function PATCH(request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { message: "Unauthorized" },
         { status: 401 }
@@ -18,9 +18,9 @@ export async function PATCH(request) {
 
     await connectToDatabase();
 
-    const { name, currentPassword, newPassword } = await request.json();
+    const { name, phone, currentPassword, newPassword } = await request.json();
 
-    const user = await userModel.findOne({ email: session.user.email });
+    const user = await userModel.findById(session.user.id);
 
     if (!user) {
       return NextResponse.json(
@@ -29,13 +29,26 @@ export async function PATCH(request) {
       );
     }
 
-    // Update name if provided
-    if (name && name !== user.name) {
-      user.name = name;
+    const trimmedName =
+      name !== undefined ? String(name).trim() : undefined;
+    if (trimmedName && trimmedName !== user.name) {
+      user.name = trimmedName;
+    }
+
+    if (phone !== undefined) {
+      const trimmed = String(phone).trim();
+      user.phone = trimmed;
     }
 
     // Update password if provided
     if (newPassword) {
+      if (user.provider === "google" || !user.password) {
+        return NextResponse.json(
+          { message: "Password is not set for this account. Sign in with Google or contact support." },
+          { status: 400 }
+        );
+      }
+
       if (!currentPassword) {
         return NextResponse.json(
           { message: "Current password is required" },

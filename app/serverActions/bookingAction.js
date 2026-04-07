@@ -10,11 +10,11 @@ export async function bookingAction(bookingDetails) {
 
   const session = await getServerSession(authOptions);
 
-  if (!session?.user?.email) {
+  if (!session?.user?.id) {
     return { success: false, message: "User not authenticated" };
   }
 
-  const user = await userModel.findOne({ email: session.user.email });
+  const user = await userModel.findById(session.user.id);
 
   if (!user) {
     return { success: false, message: "User not found" };
@@ -22,7 +22,6 @@ export async function bookingAction(bookingDetails) {
 
   try {
     const userId = user._id.toString();
-    console.log(bookingDetails.resortRoom)
     console.log("User Details:", bookingDetails);
     const userBookingDetails = await new bookingModel({
       startDate: bookingDetails.startDate,
@@ -31,7 +30,7 @@ export async function bookingAction(bookingDetails) {
       productName: bookingDetails.productName,
       offer: bookingDetails.offer,
       image: bookingDetails.image,
-      resortRoom: bookingDetails.resortRoom,   // âœ… FIXED
+      resortRoom: bookingDetails.resortRoom,
       user: userId,
       status: "pending",
       numberOfPeople: bookingDetails.numberOfPeople,

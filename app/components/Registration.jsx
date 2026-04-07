@@ -13,7 +13,7 @@ const validationSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  phoneNumber: Yup.string()
+  phone: Yup.string()
     .matches(/^[0-9]{10,15}$/, "Phone number must be between 10 and 15 digits")
     .required("Phone number is required"),
   password: Yup.string()
@@ -37,7 +37,7 @@ export default function RegisterPage() {
     initialValues: {
       name: "",
       email: "",
-      phoneNumber: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -50,7 +50,7 @@ export default function RegisterPage() {
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("email", values.email);
-        formData.append("phoneNumber", values.phoneNumber);
+        formData.append("phone", values.phone);
         formData.append("password", values.password);
 
         const data = await registerAction(formData);
@@ -149,25 +149,25 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label htmlFor="phoneNumber" className="luxury-label">
+              <label htmlFor="phone" className="luxury-label">
                 Phone Number
               </label>
               <input
-                id="phoneNumber"
-                name="phoneNumber"
+                id="phone"
+                name="phone"
                 type="tel"
                 placeholder="9999999999"
-                value={formik.values.phoneNumber}
+                value={formik.values.phone}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className={inputClass(
-                  formik.touched.phoneNumber,
-                  formik.errors.phoneNumber
+                  formik.touched.phone,
+                  formik.errors.phone
                 )}
               />
-              {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+              {formik.touched.phone && formik.errors.phone && (
                 <p className="mt-1 text-xs text-red-600">
-                  {formik.errors.phoneNumber}
+                  {formik.errors.phone}
                 </p>
               )}
             </div>
