@@ -2,12 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Design tokens — luxury resort system */
 @layer base {
+  :root {
+    --luxury-black: #0a0a0a;
+    --luxury-charcoal: #141414;
+    --luxury-gold: #c9a227;
+    --luxury-gold-light: #e8d48b;
+    --luxury-gold-dark: #8a7019;
+    --luxury-cream: #faf8f5;
+    --luxury-sand: #f0ebe3;
+    --luxury-stone: #e5dfd4;
+    --luxury-radius: 1rem;
+    --luxury-shadow: 0 8px 32px rgba(10, 10, 10, 0.12);
+    --luxury-shadow-lg: 0 25px 50px -12px rgba(10, 10, 10, 0.25);
+  }
+
   html {
     scroll-behavior: smooth;
   }
   body {
     @apply bg-luxury-cream text-luxury-black antialiased;
+  }
+}
+
+@layer components {
+  .luxury-page {
+    @apply min-h-[calc(100vh-1px)] bg-gradient-to-b from-luxury-cream via-luxury-sand/40 to-luxury-cream;
+  }
+
+  .luxury-surface {
+    @apply rounded-2xl border border-luxury-stone/80 bg-white/95 shadow-glass backdrop-blur-sm;
+  }
+
+  .luxury-label {
+    @apply mb-2 block text-sm font-medium text-luxury-charcoal;
+  }
+
+  .luxury-input {
+    @apply w-full rounded-2xl border border-luxury-stone bg-white/90 px-4 py-3 text-sm text-luxury-black shadow-sm outline-none transition-all placeholder:text-luxury-stone/90 focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20 disabled:cursor-not-allowed disabled:bg-luxury-sand/60;
+  }
+
+  .luxury-input-error {
+    @apply border-red-400 focus:border-red-400 focus:ring-red-200;
+  }
+
+  .luxury-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 }
 

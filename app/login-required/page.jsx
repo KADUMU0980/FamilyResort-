@@ -1,46 +1,50 @@
 ﻿import Link from "next/link";
+import SiteLayout from "@/app/components/layout/SiteLayout";
+import { Lock } from "lucide-react";
 
 export default function LoginRequiredPage() {
-    return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-4 shadow-xl rounded-3xl sm:px-10 border border-gray-100 text-center">
-                    <div className="mx-auto flex flex-col items-center justify-center w-20 h-20 bg-blue-50 rounded-full mb-6">
-                        <span className="text-4xl">ðŸ”’</span>
-                    </div>
-
-                    <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
-                        Login Required
-                    </h2>
-
-                    <p className="text-gray-600 mb-8 text-lg">
-                        You need to login to access this page.
-                    </p>
-
-                    <div className="space-y-4">
-                        <Link
-                            href="/login"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all hover:shadow-lg"
-                        >
-                            Login
-                        </Link>
-
-                        <Link
-                            href="/registration"
-                            className="w-full flex justify-center py-3 px-4 border border-blue-200 rounded-xl shadow-sm text-base font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
-                        >
-                            Sign Up
-                        </Link>
-
-                        <Link
-                            href="/"
-                            className="block mt-6 text-sm text-gray-500 hover:text-gray-900 underline"
-                        >
-                            Return to Home
-                        </Link>
-                    </div>
-                </div>
+  return (
+    <SiteLayout>
+      <div className="luxury-page flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="luxury-surface px-4 py-10 text-center sm:px-10">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-luxury-gold/15 ring-1 ring-luxury-gold/30">
+              <Lock className="h-9 w-9 text-luxury-gold-dark" />
             </div>
+
+            <h2 className="mb-4 font-display text-3xl font-semibold text-luxury-black">
+              Login Required
+            </h2>
+
+            <p className="mb-8 text-lg text-luxury-charcoal/75">
+              You need to login to access this page.
+            </p>
+
+            <div className="space-y-4">
+              <Link
+                href="/login"
+                className="flex w-full justify-center rounded-2xl bg-luxury-gold px-4 py-3 text-base font-semibold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light"
+              >
+                Login
+              </Link>
+
+              <Link
+                href="/registration"
+                className="flex w-full justify-center rounded-2xl border border-luxury-stone bg-luxury-sand/50 px-4 py-3 text-base font-semibold text-luxury-black transition hover:border-luxury-gold/40 hover:bg-luxury-sand"
+              >
+                Sign Up
+              </Link>
+
+              <Link
+                href="/"
+                className="mt-6 block text-sm text-luxury-charcoal/60 underline transition hover:text-luxury-black"
+              >
+                Return to Home
+              </Link>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </SiteLayout>
+  );
 }

@@ -184,23 +184,23 @@ const ManageResorts = () => {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-luxury-charcoal/45" />
               <input
                 type="text"
                 placeholder="Search resorts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="luxury-input pl-10"
               />
             </div>
 
             {/* Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-400" />
+              <Filter className="h-5 w-5 text-luxury-gold-dark" />
               <select
                 value={filterAvailable}
                 onChange={(e) => setFilterAvailable(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="luxury-input py-2"
               >
                 <option value="all">All Resorts</option>
                 <option value="available">Available</option>
@@ -210,8 +210,9 @@ const ManageResorts = () => {
 
             {/* Select All */}
             <button
+              type="button"
               onClick={toggleSelectAll}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center gap-2"
+              className="flex items-center gap-2 rounded-2xl border border-luxury-stone bg-luxury-sand/80 px-4 py-2 text-luxury-black transition hover:bg-luxury-stone/80"
             >
               {selectedResorts.length === filteredResorts.length ? (
                 <CheckSquare className="w-5 h-5" />
@@ -306,12 +307,12 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
         {/* Select Checkbox */}
         <button
           onClick={onToggleSelect}
-          className="absolute top-3 left-3 p-2 bg-white rounded-lg shadow-md hover:bg-gray-100 transition-colors"
+          className="absolute left-3 top-3 rounded-lg bg-white/95 p-2 shadow-md transition hover:bg-luxury-sand"
         >
           {isSelected ? (
-            <CheckSquare className="w-5 h-5 text-blue-600" />
+            <CheckSquare className="h-5 w-5 text-luxury-gold-dark" />
           ) : (
-            <Square className="w-5 h-5 text-gray-400" />
+            <Square className="h-5 w-5 text-luxury-charcoal/40" />
           )}
         </button>
 
@@ -325,29 +326,31 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
 
       {/* Content */}
       <div className="p-4">
-        <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">{resort.title}</h3>
+        <h3 className="mb-2 truncate font-display text-lg font-semibold text-luxury-black">{resort.title}</h3>
         
-        <div className="space-y-2 mb-4">
-          <p className="text-2xl font-bold text-blue-600">₹{resort.price}</p>
+        <div className="mb-4 space-y-2">
+          <p className="text-2xl font-bold text-luxury-black">₹{resort.price}</p>
           {resort.offer && (
-            <p className="text-sm text-green-600 font-medium">{resort.offer}</p>
+            <p className="text-sm font-medium text-emerald-700">{resort.offer}</p>
           )}
-          <p className="text-sm text-gray-600 line-clamp-2">{resort.desc}</p>
+          <p className="line-clamp-2 text-sm text-luxury-charcoal/75">{resort.desc}</p>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={onEdit}
-            className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-luxury-black px-3 py-2 text-white transition hover:bg-luxury-charcoal"
           >
-            <Edit className="w-4 h-4" />
+            <Edit className="h-4 w-4" />
             Edit
           </button>
           
           <button
+            type="button"
             onClick={onToggleAvailability}
-            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+            className="rounded-xl border border-luxury-stone bg-luxury-sand/80 px-3 py-2 text-luxury-black transition hover:bg-luxury-stone/80"
             title={resort.available !== false ? "Mark Unavailable" : "Mark Available"}
           >
             {resort.available !== false ? (
@@ -358,11 +361,12 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
           </button>
           
           <button
+            type="button"
             onClick={onDelete}
-            className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
+            className="rounded-xl bg-red-50 px-3 py-2 text-red-700 transition hover:bg-red-100"
             title="Delete"
           >
-            <Trash2 className="w-5 h-5" />
+            <Trash2 className="h-5 w-5" />
           </button>
         </div>
       </div>
@@ -408,70 +412,71 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black/50 p-4 backdrop-blur-sm">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-luxury-stone/80 bg-white/95 shadow-luxury">
         <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Edit Resort</h2>
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-display text-2xl font-semibold text-luxury-black">Edit Resort</h2>
             <button
+              type="button"
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="rounded-xl p-2 transition hover:bg-luxury-sand"
             >
-              <X className="w-6 h-6" />
+              <X className="h-6 w-6 text-luxury-charcoal" />
             </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <label className="luxury-label">Title</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="luxury-input"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price</label>
+              <label className="luxury-label">Price</label>
               <input
                 type="number"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="luxury-input"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Offer</label>
+              <label className="luxury-label">Offer</label>
               <input
                 type="text"
                 value={formData.offer}
                 onChange={(e) => setFormData({ ...formData, offer: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="luxury-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
+              <label className="luxury-label">Amenities</label>
               <input
                 type="text"
                 value={formData.amen}
                 onChange={(e) => setFormData({ ...formData, amen: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="luxury-input"
                 placeholder="WiFi, AC, TV (comma separated)"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <label className="luxury-label">Description</label>
               <textarea
                 value={formData.desc}
                 onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                rows="4"
+                className="luxury-input min-h-[120px]"
+                rows={4}
               />
             </div>
 
@@ -479,14 +484,14 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors disabled:bg-blue-400"
+                className="flex-1 rounded-2xl bg-luxury-gold py-3 font-semibold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light disabled:opacity-50"
               >
                 {loading ? "Saving..." : "Save Changes"}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
+                className="rounded-2xl border border-luxury-stone bg-luxury-sand/80 px-6 py-3 font-semibold text-luxury-black transition hover:bg-luxury-stone/80"
               >
                 Cancel
               </button>

@@ -13,66 +13,62 @@ import {
   XCircle,
   MapPin,
   CalendarDays,
-  CreditCard,
-  Smartphone,
-  Building,
-  Wallet,
-  Lock,
   ArrowBigLeft
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import PaymentModal from "./PaymentModal";
 
 const BookingStatusCard = ({ booking }) => {
   const getStatusConfig = (status) => {
     const configs = {
       approved: {
-        bg: "bg-gradient-to-br from-green-50 to-emerald-50",
-        border: "border-green-300",
-        badgeBg: "bg-green-500",
-        badgeText: "text-white",
+        bg: "bg-gradient-to-br from-luxury-sand/90 to-emerald-50/40",
+        border: "border-emerald-200/80",
+        badgeBg: "bg-luxury-black",
+        badgeText: "text-luxury-gold-light",
         icon: CheckCircle,
-        iconColor: "text-green-600",
+        iconColor: "text-emerald-700",
         title: "Booking Confirmed",
         message: "Your reservation is confirmed! Get ready for an amazing stay.",
         actionText: "View Details",
-        actionColor: "bg-green-600 hover:bg-green-700"
+        actionColor: "bg-luxury-black hover:bg-luxury-charcoal"
       },
       pending: {
-        bg: "bg-gradient-to-br from-yellow-50 to-amber-50",
-        border: "border-yellow-300",
-        badgeBg: "bg-yellow-500",
-        badgeText: "text-white",
+        bg: "bg-gradient-to-br from-luxury-sand to-amber-50/50",
+        border: "border-amber-200/90",
+        badgeBg: "bg-luxury-gold",
+        badgeText: "text-luxury-black",
         icon: Clock,
-        iconColor: "text-yellow-600",
+        iconColor: "text-amber-800",
         title: "Awaiting Approval",
         message: "Your booking request is under review. We'll notify you soon!",
         actionText: "Track Status",
-        actionColor: "bg-yellow-600 hover:bg-yellow-700"
+        actionColor: "bg-luxury-gold text-luxury-black hover:bg-luxury-gold-light"
       },
       rejected: {
-        bg: "bg-gradient-to-br from-red-50 to-rose-50",
-        border: "border-red-300",
-        badgeBg: "bg-red-500",
+        bg: "bg-gradient-to-br from-luxury-sand/80 to-red-50/40",
+        border: "border-red-200",
+        badgeBg: "bg-red-600",
         badgeText: "text-white",
         icon: XCircle,
         iconColor: "text-red-600",
         title: "Booking Not Approved",
         message: "Unfortunately, this booking couldn't be processed. Try different dates.",
         actionText: "Book Again",
-        actionColor: "bg-red-600 hover:bg-red-700"
+        actionColor: "bg-red-700 hover:bg-red-800"
       },
       cancelled: {
-        bg: "bg-gradient-to-br from-gray-50 to-slate-50",
-        border: "border-gray-300",
-        badgeBg: "bg-gray-500",
-        badgeText: "text-white",
+        bg: "bg-gradient-to-br from-luxury-sand to-luxury-stone/50",
+        border: "border-luxury-stone",
+        badgeBg: "bg-luxury-charcoal",
+        badgeText: "text-luxury-sand",
         icon: X,
-        iconColor: "text-gray-600",
+        iconColor: "text-luxury-charcoal",
         title: "Booking Cancelled",
         message: "This booking has been cancelled.",
         actionText: "Book Again",
-        actionColor: "bg-gray-600 hover:bg-gray-700"
+        actionColor: "bg-luxury-charcoal hover:bg-luxury-black"
       }
     };
     return configs[status] || configs.pending;
@@ -88,20 +84,20 @@ const BookingStatusCard = ({ booking }) => {
   };
 
   return (
-    <div className={`${config.bg} border-2 ${config.border} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300`}>
+    <div className={`${config.bg} border-2 ${config.border} rounded-2xl p-6 shadow-glass transition-all duration-300 hover:shadow-luxury`}>
       {/* Header */}
       
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-4 flex-1">
-          <div className={`p-3 bg-white rounded-xl shadow-md`}>
+          <div className="rounded-xl bg-white/90 p-3 shadow-sm ring-1 ring-luxury-stone/60">
             <StatusIcon className={`w-8 h-8 ${config.iconColor}`} />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-900 mb-1">{booking.productName}</h3>
-            <p className="text-sm text-gray-600 mb-2">{config.message}</p>
+            <h3 className="mb-1 font-display text-xl font-semibold text-luxury-black">{booking.productName}</h3>
+            <p className="mb-2 text-sm text-luxury-charcoal/80">{config.message}</p>
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-gray-500" />
-              <span className="text-sm text-gray-600">Luxury Resort</span>
+              <MapPin className="h-4 w-4 text-luxury-gold-dark" />
+              <span className="text-sm text-luxury-charcoal/70">Luxury Resort</span>
             </div>
           </div>
         </div>
@@ -127,12 +123,12 @@ const BookingStatusCard = ({ booking }) => {
       {/* Booking Details Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         {/* Check-in */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <CalendarDays className="w-5 h-5 text-blue-600" />
-            <p className="text-xs font-semibold text-gray-500 uppercase">Check-in</p>
+        <div className="rounded-xl border border-luxury-stone/60 bg-white/90 p-4 shadow-sm">
+          <div className="mb-2 flex items-center gap-2">
+            <CalendarDays className="h-5 w-5 text-luxury-gold-dark" />
+            <p className="text-xs font-semibold uppercase text-luxury-charcoal/60">Check-in</p>
           </div>
-          <p className="font-bold text-gray-900">
+          <p className="font-bold text-luxury-black">
             {new Date(booking.startDate).toLocaleDateString('en-US', { 
               weekday: 'short',
               month: 'short', 
@@ -143,12 +139,12 @@ const BookingStatusCard = ({ booking }) => {
         </div>
 
         {/* Check-out */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <CalendarDays className="w-5 h-5 text-purple-600" />
-            <p className="text-xs font-semibold text-gray-500 uppercase">Check-out</p>
+        <div className="rounded-xl border border-luxury-stone/60 bg-white/90 p-4 shadow-sm">
+          <div className="mb-2 flex items-center gap-2">
+            <CalendarDays className="h-5 w-5 text-luxury-gold-dark" />
+            <p className="text-xs font-semibold uppercase text-luxury-charcoal/60">Check-out</p>
           </div>
-          <p className="font-bold text-gray-900">
+          <p className="font-bold text-luxury-black">
             {new Date(booking.endDate).toLocaleDateString('en-US', { 
               weekday: 'short',
               month: 'short', 
@@ -159,27 +155,27 @@ const BookingStatusCard = ({ booking }) => {
         </div>
 
         {/* Nights */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <Home className="w-5 h-5 text-indigo-600" />
-            <p className="text-xs font-semibold text-gray-500 uppercase">Duration</p>
+        <div className="rounded-xl border border-luxury-stone/60 bg-white/90 p-4 shadow-sm">
+          <div className="mb-2 flex items-center gap-2">
+            <Home className="h-5 w-5 text-luxury-gold-dark" />
+            <p className="text-xs font-semibold uppercase text-luxury-charcoal/60">Duration</p>
           </div>
-          <p className="font-bold text-gray-900">{calculateNights()} Night{calculateNights() > 1 ? 's' : ''}</p>
+          <p className="font-bold text-luxury-black">{calculateNights()} Night{calculateNights() > 1 ? 's' : ''}</p>
         </div>
       </div>
 
       {/* Price & Offer */}
-      <div className="flex items-center justify-between bg-white rounded-xl p-4 shadow-sm mb-4">
+      <div className="mb-4 flex items-center justify-between rounded-xl border border-luxury-stone/60 bg-white/90 p-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <DollarSign className="w-6 h-6 text-green-600" />
+          <DollarSign className="h-6 w-6 text-luxury-gold-dark" />
           <div>
-            <p className="text-xs text-gray-500">Total Amount</p>
-            <p className="text-2xl font-bold text-gray-900">₹{booking.price}</p>
+            <p className="text-xs text-luxury-charcoal/60">Total Amount</p>
+            <p className="text-2xl font-bold text-luxury-black">₹{booking.price}</p>
           </div>
         </div>
         
         {booking.offer && (
-          <div className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-lg shadow-md">
+          <div className="flex items-center gap-2 rounded-xl bg-luxury-black px-4 py-2 text-white shadow-luxury">
             <Tag className="w-4 h-4" />
             <span className="font-bold">{booking.offer}</span>
           </div>
@@ -187,15 +183,15 @@ const BookingStatusCard = ({ booking }) => {
       </div>
 
       {/* Booking ID & Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-        <p className="text-xs text-gray-500">
-          Booking ID: <span className="font-mono font-semibold text-gray-700">{booking._id}</span>
+      <div className="flex items-center justify-between border-t border-luxury-stone/60 pt-4">
+        <p className="text-xs text-luxury-charcoal/55">
+          Booking ID: <span className="font-mono font-semibold text-luxury-black">{booking._id}</span>
         </p>
         
       </div>
 
       {/* Booked Date */}
-      <p className="text-xs text-gray-400 mt-2">
+      <p className="mt-2 text-xs text-luxury-charcoal/45">
         Booked on {new Date(booking.createdAt).toLocaleDateString('en-US', { 
           month: 'long', 
           day: 'numeric',
@@ -269,10 +265,10 @@ const MyReservations = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      <div className="flex min-h-[50vh] items-center justify-center bg-luxury-cream p-4">
         <div className="text-center">
-          <Loader2 className="w-16 h-16 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 font-medium text-lg">Loading your bookings...</p>
+          <Loader2 className="mx-auto mb-4 h-16 w-16 animate-spin text-luxury-gold-dark" />
+          <p className="text-lg font-medium text-luxury-charcoal/75">Loading your bookings...</p>
         </div>
       </div>
     );
@@ -314,22 +310,22 @@ const MyReservations = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
-              <p className="text-sm text-blue-700 font-medium">Total Bookings</p>
-              <p className="text-3xl font-bold text-blue-900">{statusCounts.all}</p>
+          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="rounded-xl border border-luxury-stone/80 bg-luxury-sand/60 p-4">
+              <p className="text-sm font-medium text-luxury-charcoal/70">Total Bookings</p>
+              <p className="font-display text-3xl font-semibold text-luxury-black">{statusCounts.all}</p>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
-              <p className="text-sm text-green-700 font-medium">Confirmed</p>
-              <p className="text-3xl font-bold text-green-900">{statusCounts.approved}</p>
+            <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-4">
+              <p className="text-sm font-medium text-emerald-800/90">Confirmed</p>
+              <p className="font-display text-3xl font-semibold text-emerald-900">{statusCounts.approved}</p>
             </div>
-            <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 border border-yellow-200">
-              <p className="text-sm text-yellow-700 font-medium">Pending</p>
-              <p className="text-3xl font-bold text-yellow-900">{statusCounts.pending}</p>
+            <div className="rounded-xl border border-amber-200/80 bg-amber-50/50 p-4">
+              <p className="text-sm font-medium text-amber-900/80">Pending</p>
+              <p className="font-display text-3xl font-semibold text-amber-950">{statusCounts.pending}</p>
             </div>
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 border border-red-200">
-              <p className="text-sm text-red-700 font-medium">Rejected</p>
-              <p className="text-3xl font-bold text-red-900">{statusCounts.rejected}</p>
+            <div className="rounded-xl border border-red-200/80 bg-red-50/50 p-4">
+              <p className="text-sm font-medium text-red-800/90">Rejected</p>
+              <p className="font-display text-3xl font-semibold text-red-900">{statusCounts.rejected}</p>
             </div>
           </div>
         </div>
@@ -395,177 +391,6 @@ const MyReservations = () => {
             onSuccess={handlePaymentSuccess}
           />
         )}
-      </div>
-    </div>
-  );
-};
-
-const PaymentModal = ({ booking, onClose, onSuccess }) => {
-  const [selectedMethod, setSelectedMethod] = useState("card");
-  const [processing, setProcessing] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-
-  const paymentMethods = [
-    { id: "card", name: "Credit/Debit Card", icon: CreditCard },
-    { id: "upi", name: "UPI", icon: Smartphone },
-    { id: "netbanking", name: "Net Banking", icon: Building },
-    { id: "wallet", name: "Wallet", icon: Wallet },
-  ];
-
-  const handlePayment = async () => {
-    setProcessing(true);
-
-    try {
-      const initiateResponse = await fetch("/api/bookings/payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookingId: booking._id,
-          paymentMethod: selectedMethod
-        })
-      });
-
-      const initiateData = await initiateResponse.json();
-
-      if (!initiateResponse.ok) {
-        alert(initiateData.message || "Failed to initiate payment");
-        setProcessing(false);
-        return;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      const verifyResponse = await fetch("/api/bookings/payment", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookingId: booking._id,
-          paymentId: initiateData.orderId,
-          paymentMethod: selectedMethod,
-          transactionId: `TXN_${Date.now()}`
-        })
-      });
-
-      const verifyData = await verifyResponse.json();
-
-      if (verifyResponse.ok) {
-        setPaymentSuccess(true);
-        setTimeout(() => {
-          onSuccess();
-        }, 2000);
-      } else {
-        alert(verifyData.message || "Payment verification failed");
-      }
-
-    } catch (error) {
-      console.error("Payment error:", error);
-      alert("An error occurred during payment");
-    } finally {
-      setProcessing(false);
-    }
-  };
-
-  if (paymentSuccess) {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="w-12 h-12 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
-          <p className="text-gray-600 mb-4">Your booking is now confirmed and paid.</p>
-          <p className="text-sm text-gray-500">Refreshing your bookings...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Complete Payment</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X className="w-6 h-6 text-gray-600" />
-          </button>
-        </div>
-
-        <div className="p-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Lock className="w-5 h-5 text-blue-600" />
-              <p className="text-sm font-semibold text-blue-900">Secure Payment</p>
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-700 font-medium">{booking.productName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600 text-sm">
-                  {new Date(booking.startDate).toLocaleDateString()} - {new Date(booking.endDate).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex justify-between pt-2 border-t border-blue-200">
-                <span className="font-bold text-gray-900">Total Amount</span>
-                <span className="font-bold text-gray-900 text-xl">₹{booking.price}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Select Payment Method</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {paymentMethods.map((method) => {
-                const Icon = method.icon;
-                return (
-                  <button
-                    key={method.id}
-                    onClick={() => setSelectedMethod(method.id)}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      selectedMethod === method.id
-                        ? "border-blue-600 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <Icon className={`w-8 h-8 mx-auto mb-2 ${
-                      selectedMethod === method.id ? "text-blue-600" : "text-gray-600"
-                    }`} />
-                    <p className={`font-medium text-sm ${
-                      selectedMethod === method.id ? "text-blue-900" : "text-gray-700"
-                    }`}>
-                      {method.name}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <button
-            onClick={handlePayment}
-            disabled={processing}
-            className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {processing ? (
-              <>
-                <Loader2 className="w-6 h-6 animate-spin" />
-                Processing Payment...
-              </>
-            ) : (
-              <>
-                <Lock className="w-5 h-5" />
-                Pay ₹{booking.price}
-              </>
-            )}
-          </button>
-
-          <p className="text-xs text-center text-gray-500 mt-4">
-            ðŸ”’ Your payment information is encrypted and secure
-          </p>
-        </div>
       </div>
     </div>
   );

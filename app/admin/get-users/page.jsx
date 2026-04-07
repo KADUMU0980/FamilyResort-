@@ -13,9 +13,9 @@ const GetUsers = async () => {
 
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <p className="text-gray-700 text-lg">Unauthorized - Please log in</p>
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream px-4">
+        <div className="luxury-surface max-w-md p-8 text-center">
+          <p className="text-lg text-luxury-charcoal/85">Unauthorized — Please log in</p>
         </div>
       </div>
     );
@@ -24,9 +24,9 @@ const GetUsers = async () => {
   // 2ï¸âƒ£ Only admin can access
   if (session.user.role !== "admin") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <p className="text-gray-700 text-lg">Access Denied - Admin only</p>
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream px-4">
+        <div className="luxury-surface max-w-md p-8 text-center">
+          <p className="text-lg text-luxury-charcoal/85">Access Denied — Admin only</p>
         </div>
       </div>
     );

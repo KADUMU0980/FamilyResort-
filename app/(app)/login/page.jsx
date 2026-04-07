@@ -1,12 +1,10 @@
-﻿"use client"
-import React from 'react'
-import UserLogin from '@/app/components/UserLogin';
-const LoginPage = () => {
-  return (
-    <div>
-      <UserLogin />
-    </div>
-  )
-}
+﻿import SiteLayout from "@/app/components/layout/SiteLayout";
+import UserLogin from "@/app/components/UserLogin";
 
-export default LoginPage
+export default function LoginPage() {
+  return (
+    <SiteLayout>
+      <UserLogin />
+    </SiteLayout>
+  );
+}
